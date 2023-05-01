@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 
 export default function VenueCard({ data }) {
   const [imgIndex, setImgIndex] = useState(0);
@@ -58,3 +59,7 @@ export default function VenueCard({ data }) {
     </div>
   );
 }
+
+VenueCard.propTypes = {
+  data: PropTypes.object,
+};
