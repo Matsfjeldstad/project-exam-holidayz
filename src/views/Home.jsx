@@ -6,7 +6,7 @@ export default function Home() {
   async function getVenues() {
     try {
       const response = await fetch(
-        "https://nf-api.onrender.com/api/v1/holidaze/venues"
+        "https://nf-api.onrender.com/api/v1/holidaze/venues?sort=created"
       );
       const data = await response.json();
       setVenueData(data);
