@@ -1,11 +1,15 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 export default function VenueCard({ data }) {
   const [imgIndex, setImgIndex] = useState(0);
 
   return (
-    <div className="max-w-40 group flex cursor-pointer flex-col overflow-hidden font-poppins">
+    <Link
+      to={`/venue/${data.id}`}
+      className="max-w-40 group flex cursor-pointer flex-col overflow-hidden font-poppins"
+    >
       <div className="relative flex h-80 w-full justify-end overflow-hidden p-4">
         <div>💓</div>
         <img
@@ -56,7 +60,7 @@ export default function VenueCard({ data }) {
           From <span className="text-lg font-bold">{data.price} nok</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
