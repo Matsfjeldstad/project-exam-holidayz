@@ -2,7 +2,7 @@ export default function Navbar() {
   const logedIn = false;
 
   const hoverLinkClass =
-    "after:duration-150 after:absolute after:bottom-0 after:right- after:h-1 after:w-0 after:bg-gray-900 after:opacity-0  hover:after:opacity-100 hover:after:w-full";
+    "after:duration-150 after:absolute after:bottom-0 after:left-0 after:h-1 after:w-0 after:bg-gray-900 after:opacity-0  hover:after:opacity-100 hover:after:w-full";
 
   return (
     <div className="flex w-full justify-between font-poppins">
