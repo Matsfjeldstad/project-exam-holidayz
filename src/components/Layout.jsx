@@ -1,6 +1,5 @@
-import React from "react";
-import Navbar from "./shared/navbar";
 import Router from "../routes/Router";
+import Navbar from "./shared/Navbar";
 
 export default function Layout() {
   return (
