@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Navbar() {
   const logedIn = false;
 
@@ -6,7 +8,9 @@ export default function Navbar() {
 
   return (
     <div className="flex w-full justify-between font-poppins">
-      <div className="flex text-xl font-bold text-[#FF004D]">Holidaze</div>
+      <Link to={"/"} className="flex text-xl font-bold text-[#FF004D]">
+        Holidaze
+      </Link>
       <nav className="flex gap-4">
         {/* todo: change to reactrouter links later  */}
         <a className={`relative ${hoverLinkClass}`}>Venues</a>
