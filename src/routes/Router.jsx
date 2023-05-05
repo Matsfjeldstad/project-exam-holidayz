@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import Home from "../views/Home";
-import SpesificVenue from "../views/SpesificVenue";
+import Home from "../pages/Home";
+import SpesificVenue from "../pages/SpesificVenue";
 
 export default function Router() {
   return (
