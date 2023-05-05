@@ -1,4 +1,4 @@
-export default function Parking() {
+export default function Parking(props) {
   return (
     <svg
       width="45"
@@ -6,6 +6,7 @@ export default function Parking() {
       viewBox="0 0 45 45"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <path
         d="M32 29.6255H36V32.6255C36 33.1775 35.552 33.6255 35 33.6255H33C32.448 33.6255 32 33.1775 32 32.6255V29.6255Z"
