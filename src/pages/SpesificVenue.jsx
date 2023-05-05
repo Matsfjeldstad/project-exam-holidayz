@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Wifi from "../assets/icons/airbnb-icons-amenities/Wifi";
 import Parking from "../assets/icons/airbnb-icons-amenities/Parking";
 import ForkKnife from "../assets/icons/airbnb-icons-amenities/ForkKnife";
-import Pawprint from "../assets/icons/airbnb-icons-amenities/Pawprint";
+import PawPrint from "../assets/icons/airbnb-icons-amenities/PawPrint";
 import ImageDisplayGrid from "../components/ImageDisplayGrid";
 import ReactMapGLMap from "../components/shared/Map";
 import Calendar from "../components/ui/Calendar";
@@ -91,7 +91,7 @@ export default function SpesificVenue() {
               )}
               {venueData.meta.pets && (
                 <div className="flex items-center gap-2">
-                  <Pawprint />
+                  <PawPrint />
                   <div>Pets Allowed</div>
                 </div>
               )}

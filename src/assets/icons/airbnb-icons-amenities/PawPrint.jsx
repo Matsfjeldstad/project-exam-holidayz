@@ -1,4 +1,4 @@
-export default function Pawprint() {
+export default function PawPrint() {
   return (
     <svg
       width="45"

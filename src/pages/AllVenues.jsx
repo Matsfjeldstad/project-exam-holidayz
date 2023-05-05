@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import VenueCard from "../components/VenueCard";
 
 export default function AllVenues() {
