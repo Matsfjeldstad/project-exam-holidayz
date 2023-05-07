@@ -4,18 +4,21 @@ import { Link } from "react-router-dom";
 
 export default function VenueCard({ data }) {
   const [imgIndex, setImgIndex] = useState(0);
-
+  console.log(data);
   return (
     <Link
-      to={`/venue/${data.id}`}
+      to={`/venue/supabase/${data.id}`}
       className="max-w-40 group flex cursor-pointer flex-col overflow-hidden font-poppins"
     >
       <div className="relative flex h-80 w-full justify-end overflow-hidden p-4">
         <div>💓</div>
-        <img
-          src={data.media[imgIndex]}
-          className="absolute left-0 top-0 h-full w-full rounded-lg bg-gray-500 object-cover transition-all"
-        />
+
+        {data.media && data.media.length > 0 && (
+          <img
+            src={data.media[imgIndex]}
+            className="absolute left-0 top-0 h-full w-full rounded-lg bg-gray-500 object-cover transition-all"
+          />
+        )}
         {data.media.length > 1 && (
           <div className=" relative z-30 flex h-full w-full items-end justify-center gap-2">
             {data.media.map((image, index) => {
@@ -57,7 +60,8 @@ export default function VenueCard({ data }) {
           <div className="flex items-center gap-1 text-xs">Min night: 1</div>
         </div>
         <div className="text-sm">
-          From <span className="text-lg font-bold">{data.price} nok</span>
+          From{" "}
+          <span className="text-lg font-bold">{data.price_per_night} nok</span>
         </div>
       </div>
     </Link>
