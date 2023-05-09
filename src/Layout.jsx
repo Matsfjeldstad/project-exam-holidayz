@@ -14,7 +14,7 @@ export default function Layout() {
       <ThemeContext.Provider
         value={{ isDarkTheme, toggleTheme, setIsDarkTheme }}
       >
-        <header className="absolute top-0 h-20 w-full">
+        <header className="absolute top-0 z-40 h-20 w-full">
           <Navbar></Navbar>
         </header>
         <main className="">

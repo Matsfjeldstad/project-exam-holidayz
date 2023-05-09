@@ -1,43 +1,67 @@
 import NavigationCard from "../components/ui/NavigationCard";
+import { useContext, useEffect } from "react";
+import ThemeContext from "../utils/ThemeContext";
+import { MapPin } from "../assets/icons/Icons";
+import { SearchBox } from "@mapbox/search-js-react";
+
+const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_REACT_MAPBOX_API_KEY;
 
 export default function Home() {
+  const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
+  useEffect(() => {
+    if (!isDarkTheme) {
+      setIsDarkTheme(true);
+    }
+  }, [isDarkTheme, setIsDarkTheme]);
+
+  function handleForm(event) {
+    event.preventDefault();
+    console.log(event.target[0].value);
+  }
+
   return (
     <div className="">
       <section className="flex h-screen w-full items-center  bg-gradient-to-br from-[#151515] to-[#0b0b0b] p-6 text-white">
         <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-10">
-          <div className="flex flex-col gap-8">
-            <h1 className="text-6xl font-black">
+          <div className="flex w-full flex-col items-center gap-8 lg:items-start">
+            <h1 className="text-center text-6xl font-black lg:text-left">
               Your <span className=" text-[#FF004D]">dream deastination,</span>
               <br /> one click away
             </h1>
-            <p className="mt-4 text-lg font-medium">
+            <p className="mt-4 text-center text-lg font-medium md:text-left">
               Find the perfect place to stay for your holiday, from city
               apartments to secluded cabins.
             </p>
-            <form className="flex w-fit items-center justify-between gap-5 rounded-full bg-white py-2 pl-10 pr-3 text-gray-900 ">
-              <label className="flex items-center border-r border-gray-300">
-                <span className="font-medium">Location</span>
-                <input
-                  type="text"
-                  placeholder="Add location here"
-                  className="rounded-md bg-transparent p-3 text-gray-900 "
-                />
-              </label>
-              <label className="flex items-center border-gray-300">
-                <span className="font-medium">Guests</span>
-                <input
-                  type="text"
-                  placeholder="Number of guests"
-                  className="rounded-md bg-transparent p-3 text-gray-900 "
-                />
+            <form
+              onSubmit={handleForm}
+              className="flex w-fit items-center justify-between rounded-full bg-white px-6 py-2 pr-3 text-gray-900 lg:gap-5"
+            >
+              <label className="flex w-fit items-center ">
+                <MapPin fill="#444" />
+                <SearchBox
+                  accessToken={MAPBOX_ACCESS_TOKEN}
+                  onRetrieve={(res) => {
+                    console.log(res);
+                  }}
+                >
+                  <input
+                    className="w-full rounded-md bg-transparent p-3 text-gray-900 "
+                    type="text"
+                    name="address"
+                    placeholder="add location here"
+                    autoComplete="address-line2 country-name"
+                  />
+                </SearchBox>
               </label>
               <button className="rounded-full bg-[#FF004D] px-10 py-4 font-medium text-white hover:bg-[#ff004ccc] ">
                 search
               </button>
             </form>
-            <button className="font-medium">Explore all destinations</button>
+            <button className="w-fit font-medium underline">
+              Explore all destinations
+            </button>
           </div>
-          <div className="group relative hidden h-[500px] w-[400px] items-center justify-center overflow-hidden rounded-[150px] lg:flex">
+          <div className="group relative hidden h-[500px] w-[600px] items-center justify-center overflow-hidden rounded-[150px] lg:flex">
             <img
               src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
               alt="hero"
