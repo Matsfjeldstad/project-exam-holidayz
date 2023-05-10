@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import supabase from "../lib/supabase";
@@ -11,36 +11,46 @@ const MapComponent = () => {
     zoom: 11,
     width: "100%",
     height: "100%",
-    overflow: "hidden",
   });
   const onViewportChange = (newViewport) => {
+    console.log(newViewport);
     setViewport({ ...viewport, ...newViewport });
   };
 
   const [houses, setHouses] = useState([]);
 
+  const mapRef = useRef();
+
   useEffect(() => {
-    const fetchHouses = async () => {
-      const { data, error } = await supabase.rpc("houses_within_radius", {
-        center: `POINT(${viewport.longitude} ${viewport.latitude})`,
-        radius: 50000, // Radius in meters
-      });
-
-      if (error) {
-        console.error("Error fetching houses:", error);
-      } else {
-        console.log("Data:", data);
-        setHouses(data);
-      }
-    };
-
-    fetchHouses();
+    if (mapRef.current) {
+      const bounds = mapRef.current.getMap().getBounds().toArray().flat();
+      console.log(bounds);
+    }
+    if (viewport) {
+      console.log(viewport);
+      const fetchHouses = async () => {
+        const { data, error } = await supabase.rpc("houses_within_radius", {
+          center: `POINT(${viewport.longitude} ${viewport.latitude})`,
+          radius: 5000, // Radius in meters
+        });
+        if (error) {
+          console.error("Error fetching houses:", error);
+        } else {
+          console.log("Data:", data);
+          setHouses(data);
+        }
+      };
+      fetchHouses();
+    } else {
+      console.log("No viewport");
+    }
   }, [viewport]);
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-full">
       <ReactMapGL
         {...viewport}
+        ref={mapRef}
         mapboxAccessToken={import.meta.env.VITE_REACT_MAPBOX_API_KEY}
         mapStyle="mapbox://styles/mapbox/dark-v11"
         onViewportChange={onViewportChange}
