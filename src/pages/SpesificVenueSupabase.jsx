@@ -7,7 +7,7 @@ import PawPrint from "../assets/icons/airbnb-icons-amenities/PawPrint";
 import ImageDisplayGrid from "../components/ImageDisplayGrid";
 import ReactMapGLMap from "../components/MapBox/SpesificVenueMap";
 import Calendar from "../components/ui/Calendar";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 // import supabase from "../lib/supabase";
 import ThemeContext from "../utils/ThemeContext";
 import { useGetSingleVenueQuery } from "../store/modules/apiSlice";

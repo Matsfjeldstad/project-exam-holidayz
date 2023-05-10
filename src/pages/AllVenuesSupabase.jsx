@@ -1,16 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import VenueCard from "../components/VenueCard";
 import ThemeContext from "../utils/ThemeContext";
 import { useGetVenuesQuery } from "../store/modules/apiSlice";
 
 export default function AllVenuesSupabase() {
-  // const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
+  const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
 
-  // useEffect(() => {
-  //   if (isDarkTheme) {
-  //     setIsDarkTheme(false);
-  //   }
-  // }, [isDarkTheme, setIsDarkTheme]);
+  useEffect(() => {
+    if (isDarkTheme) {
+      setIsDarkTheme(false);
+    }
+  }, [isDarkTheme, setIsDarkTheme]);
 
   const { data: venueData, error, isLoading } = useGetVenuesQuery();
 
