@@ -7,7 +7,7 @@ export default function Navbar() {
     "after:duration-150 after:absolute after:bottom-0 after:left-0 after:h-1 after:w-0 after:bg-gray-900 after:opacity-0  hover:after:opacity-100 hover:after:w-full";
 
   return (
-    <div className="fixed left-0 top-0 flex w-full justify-between p-6 font-poppins">
+    <div className="absolute left-0 top-0 flex w-full justify-between p-6 font-poppins">
       <Link to={"/"} className="flex text-xl font-bold text-[#FF004D]">
         Holidaze
       </Link>
