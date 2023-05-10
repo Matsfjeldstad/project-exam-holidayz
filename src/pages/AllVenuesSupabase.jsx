@@ -1,25 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import VenueCard from "../components/VenueCard";
-import supabase from "../lib/supabase";
 import ThemeContext from "../utils/ThemeContext";
+import { useGetVenuesQuery } from "../store/modules/apiSlice";
+
 export default function AllVenuesSupabase() {
-  const [venueData, setVenueData] = useState([]);
-  const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
+  // const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    if (isDarkTheme) {
-      setIsDarkTheme(false);
-    }
-    document.title = "Holidaze | Home";
-    getVenues();
-  }, [isDarkTheme, setIsDarkTheme]);
+  // useEffect(() => {
+  //   if (isDarkTheme) {
+  //     setIsDarkTheme(false);
+  //   }
+  // }, [isDarkTheme, setIsDarkTheme]);
 
-  async function getVenues() {
-    let { data: venues, error } = await supabase.from("venues").select("*");
-    if (!error) {
-      setVenueData(venues);
-    }
-    return error.message;
+  const { data: venueData, error, isLoading } = useGetVenuesQuery();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>{error}</div>;
   }
 
   return (
