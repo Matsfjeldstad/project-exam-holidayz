@@ -4,10 +4,10 @@ import Navbar from "./shared/Navbar";
 export default function Layout() {
   return (
     <>
-      <header className="flex h-20 items-center border-b px-12 py-4">
+      <header className="mx-auto w-full max-w-7xl">
         <Navbar></Navbar>
       </header>
-      <main>
+      <main className="">
         <Router />
       </main>
       <footer>hello</footer>

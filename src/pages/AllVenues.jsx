@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import VenueCard from "../components/VenueCard";
 
-export default function Home() {
+export default function AllVenues() {
   const [venueData, setVenueData] = useState();
   async function getVenues() {
     try {
