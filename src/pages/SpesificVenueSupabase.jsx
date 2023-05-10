@@ -1,17 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Wifi from "../assets/icons/airbnb-icons-amenities/Wifi";
 import Parking from "../assets/icons/airbnb-icons-amenities/Parking";
 import ForkKnife from "../assets/icons/airbnb-icons-amenities/ForkKnife";
 import PawPrint from "../assets/icons/airbnb-icons-amenities/PawPrint";
 import ImageDisplayGrid from "../components/ImageDisplayGrid";
-import ReactMapGLMap from "../components/shared/Map";
+import ReactMapGLMap from "../components/MapBox/SpesificVenueMap";
 import Calendar from "../components/ui/Calendar";
 import { format } from "date-fns";
 import supabase from "../lib/supabase";
+import ThemeContext from "../utils/ThemeContext";
 
 export default function SpesificVenueSupabase() {
   const [venueData, setVenueData] = useState();
+  const [mapGeoLocationData, setMapGeoLocationData] = useState({
+    latitude: 6.2,
+    longitude: 53.6,
+  });
   const [dateRange, setDateRange] = useState({
     from: "",
     to: "",
@@ -19,7 +24,12 @@ export default function SpesificVenueSupabase() {
 
   let { id } = useParams();
 
+  const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
+
   useEffect(() => {
+    if (isDarkTheme) {
+      setIsDarkTheme(true);
+    }
     document.title = "Holidaze | Home";
     getVenues();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,7 +40,11 @@ export default function SpesificVenueSupabase() {
       .from("venues")
       .select("*")
       .eq("id", id);
-    console.log(data[0]);
+    if (error) console.log(error);
+    setMapGeoLocationData({
+      longitude: data[0].location.coordinates.lon,
+      latitude: data[0].location.coordinates.lat,
+    });
     setVenueData(data[0]);
   }
 
@@ -42,7 +56,7 @@ export default function SpesificVenueSupabase() {
             to: new Date(booking.dateTo),
           };
         })
-      : "";
+      : [];
 
   if (venueData) {
     return (
@@ -103,16 +117,16 @@ export default function SpesificVenueSupabase() {
           <h3 className="text-2xl font-medium">Location</h3>
           {venueData.location.lng !== 0 && venueData.location.lat !== 0 ? (
             <div className="flex overflow-hidden rounded-lg border">
-              <div className="h-[560px] w-full">
+              <div className="relative h-[560px] w-full">
                 <ReactMapGLMap
                   center={[
-                    venueData.location.coordinates.lon,
-                    venueData.location.coordinates.lat,
+                    mapGeoLocationData.longitude,
+                    mapGeoLocationData.latitude,
                   ]}
                   zoom={13}
                   marker={{
-                    lng: venueData.location.coordinates.lon,
-                    lat: venueData.location.coordinates.lat,
+                    lng: mapGeoLocationData.longitude,
+                    lat: mapGeoLocationData.latitude,
                     price: venueData.price_per_night,
                   }}
                 />
@@ -130,7 +144,7 @@ export default function SpesificVenueSupabase() {
                 mode="range"
                 selected={dateRange}
                 onSelect={setDateRange}
-                bookings={[]}
+                bookings={bookedDates}
                 numberOfMonths={2}
                 className="h-full w-fit"
               />

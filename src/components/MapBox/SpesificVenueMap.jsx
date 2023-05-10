@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import House from "../../assets/icons/airbnb-icons-places/House";
 import PropTypes from "prop-types";
 
 // Set your Mapbox access token here
-const MAPBOX_ACCESS_TOKEN =
-  "pk.eyJ1IjoibWF0c2ZqZWxkc3RhZCIsImEiOiJjbGg3bWJ4cTMwMDIwM2twbm5mdHZxa3I0In0.-xj0L1OaUxKQkR5ZVPxnmQ";
+const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_REACT_MAPBOX_API_KEY;
 
 const ReactMapGLMap = ({ center, zoom, marker }) => {
   const [viewport, setViewport] = useState({
@@ -18,6 +17,8 @@ const ReactMapGLMap = ({ center, zoom, marker }) => {
     overflow: "hidden",
   });
 
+  const mapRef = useRef();
+
   const onViewportChange = (newViewport) => {
     setViewport({ ...viewport, ...newViewport });
   };
@@ -25,6 +26,7 @@ const ReactMapGLMap = ({ center, zoom, marker }) => {
   return (
     <ReactMapGL
       {...viewport}
+      ref={mapRef}
       mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
       mapStyle="mapbox://styles/mapbox/dark-v11"
       onViewportChange={onViewportChange}
@@ -45,9 +47,7 @@ const ReactMapGLMap = ({ center, zoom, marker }) => {
           </div>
         </Marker>
       )}
-      <div style={{ position: "absolute", top: 0, right: 0, padding: "10px" }}>
-        <NavigationControl position="bottom-right" />
-      </div>
+      <NavigationControl position="bottom-right" />
     </ReactMapGL>
   );
 };
