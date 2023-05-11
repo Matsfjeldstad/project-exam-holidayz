@@ -7,12 +7,33 @@ import { SearchBox } from "@mapbox/search-js-react";
 const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_REACT_MAPBOX_API_KEY;
 
 export default function Home() {
-  const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
+  const {
+    isDarkTheme,
+    setIsDarkTheme,
+    hasMaxWidthContainer,
+    setHasMaxWidthContainer,
+    hasBgColour,
+    setHasBgColour,
+  } = useContext(ThemeContext);
+
   useEffect(() => {
     if (!isDarkTheme) {
       setIsDarkTheme(true);
     }
-  }, [isDarkTheme, setIsDarkTheme]);
+    if (hasBgColour) {
+      setHasBgColour(false);
+    }
+    if (hasMaxWidthContainer) {
+      setHasMaxWidthContainer(false);
+    }
+  }, [
+    isDarkTheme,
+    setIsDarkTheme,
+    hasBgColour,
+    setHasBgColour,
+    hasMaxWidthContainer,
+    setHasMaxWidthContainer,
+  ]);
 
   function handleForm(event) {
     event.preventDefault();
@@ -22,11 +43,15 @@ export default function Home() {
   return (
     <div className="">
       <section className="flex h-screen w-full items-center  bg-gradient-to-br from-[#151515] to-[#0b0b0b] p-6 text-white">
-        <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-10">
+        <div className="mx-auto flex w-full max-w-[1500px] items-center justify-between gap-10">
           <div className="flex w-full flex-col items-center gap-8 lg:items-start">
             <h1 className="text-center text-6xl font-black lg:text-left">
-              Your <span className=" text-[#FF004D]">dream deastination,</span>
-              <br /> one click away
+              Your{" "}
+              <span className="h-fit translate-x-8 text-[#FF004D]">
+                dream deastination,
+              </span>
+              <br />
+              one click away
             </h1>
             <p className="mt-4 text-center text-lg font-medium md:text-left">
               Find the perfect place to stay for your holiday, from city

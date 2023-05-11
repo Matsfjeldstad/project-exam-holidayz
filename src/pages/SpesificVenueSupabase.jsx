@@ -8,7 +8,6 @@ import ImageDisplayGrid from "../components/ImageDisplayGrid";
 import ReactMapGLMap from "../components/MapBox/SpesificVenueMap";
 import Calendar from "../components/ui/Calendar";
 import { format } from "date-fns";
-// import supabase from "../lib/supabase";
 import ThemeContext from "../utils/ThemeContext";
 import { useGetSingleVenueQuery } from "../store/modules/apiSlice";
 
@@ -24,11 +23,19 @@ export default function SpesificVenueSupabase() {
 
   let { id } = useParams();
 
-  const { isDarkTheme, setIsDarkTheme } = useContext(ThemeContext);
+  const {
+    isDarkTheme,
+    setIsDarkTheme,
+    hasMaxWidthContainer,
+    setHasMaxWidthContainer,
+  } = useContext(ThemeContext);
 
   useEffect(() => {
     if (isDarkTheme) {
       setIsDarkTheme(true);
+    }
+    if (!hasMaxWidthContainer) {
+      setHasMaxWidthContainer(true);
     }
     document.title = "Holidaze | Home";
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +69,7 @@ export default function SpesificVenueSupabase() {
 
   if (venueData) {
     return (
-      <div className="mx-auto mt-32 flex max-w-7xl flex-col gap-14">
+      <div className="mx-auto mt-32 flex max-w-[1500px] flex-col gap-14 px-10">
         <div className="">
           <h1 className="mb-2 text-4xl font-medium">{venueData.title}</h1>
           <div className="flex gap-2">
