@@ -10,7 +10,7 @@ export default function VenueCard({ data }) {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, translateY: 20 }}
-      className="max-w-40 group flex cursor-pointer flex-col overflow-hidden font-poppins"
+      className="group flex cursor-pointer flex-col overflow-hidden font-poppins"
     >
       <div className="relative flex h-80 w-full justify-end overflow-hidden p-4">
         <div className="relative z-10 h-fit w-fit">💓</div>

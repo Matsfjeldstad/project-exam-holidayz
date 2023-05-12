@@ -12,8 +12,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import useSupercluster from "use-supercluster";
 import House from "../assets/icons/airbnb-icons-places/House";
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const MapComponent = () => {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const {
     isDarkTheme,
     setIsDarkTheme,
@@ -41,6 +43,7 @@ const MapComponent = () => {
     hasMaxWidthContainer,
     setHasMaxWidthContainer,
   ]);
+
   const [viewport, setViewport] = useState({
     latitude: 37.7749,
     longitude: -122.4194,
@@ -100,8 +103,8 @@ const MapComponent = () => {
   });
 
   return (
-    <div className="relative mt-20 flex h-full w-full">
-      <div className="gap- left-0 top-0 z-30 flex h-fit w-3/5 flex-col bg-white px-10">
+    <div className="relative mt-20 h-full w-full">
+      {/* <div className="z-30 flex h-fit flex-col gap-1 bg-white px-10 lg:w-3/5">
         <h1 className="text-4xl font-bold">Venues</h1>
         <AnimatePresence>
           {venues.length > 0 ? (
@@ -132,9 +135,55 @@ const MapComponent = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-      <div className="sticky bottom-0 top-20 h-full w-2/5 bg-black">
-        <div className=" h-[calc(100vh_-_80px)]">
+      </div> */}
+      <div className=" h-[calc(100vh_-_80px)] w-full bg-black lg:sticky lg:top-20 lg:w-2/5">
+        <div className="h-full">
+          {isTabletOrMobile && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              dragConstraints={{ bottom: 0, top: 0 }}
+              dragMomentum={false}
+              // dragElastic={0.8}
+              drag="y"
+              className="absolute top-[calc(100%_-_96px)] z-20 mx-auto flex h-fit w-full flex-col justify-start overflow-y-scroll rounded-t-3xl bg-white p-6"
+            >
+              <div className="relative flex h-full flex-col items-center justify-start gap-4">
+                <div className="h-3 w-20 rounded-full bg-slate-400"></div>
+                <motion.div className="text-center">
+                  {venues.length} homes found
+                </motion.div>
+              </div>
+              <AnimatePresence>
+                {venues.length > 0 ? (
+                  <div className="mt-10 flex flex-col gap-4">
+                    <motion.div
+                      animate="show"
+                      className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3"
+                    >
+                      {venues.map((venue) => (
+                        <VenueCard key={venue.id} data={venue} />
+                      ))}
+                    </motion.div>
+                  </div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, translateY: 20 }}
+                    animate={{ opacity: 1, translateY: 0 }}
+                    exit={{ opacity: 0, translateY: 20 }}
+                    className="mt-10 flex h-screen flex-col gap-4"
+                  >
+                    <h2 className="text-xl">No Venues in this area...</h2>
+                    <Link to={"/venues/supabase"}>
+                      <button className="w-fit rounded-full bg-gray-900 px-4 py-2 text-white">
+                        Check all venues
+                      </button>
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
           <ReactMapGL
             {...viewport}
             ref={mapRef}
@@ -156,7 +205,9 @@ const MapComponent = () => {
                 Loading...
               </div>
             )}
-            <GeolocateControl></GeolocateControl>
+            <GeolocateControl
+              position={isTabletOrMobile ? "top-left" : "top-right"}
+            ></GeolocateControl>
             {clusters.map((cluster) => {
               // every cluster point has coordinates
               const [longitude, latitude] = cluster.geometry.coordinates;
@@ -201,7 +252,9 @@ const MapComponent = () => {
                 );
               }
             })}
-            <NavigationControl position="bottom-right" />
+            <NavigationControl
+              position={isTabletOrMobile ? "top-right" : "bottom-right"}
+            />
           </ReactMapGL>
         </div>
       </div>
