@@ -142,14 +142,14 @@ const MapComponent = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              dragConstraints={{ bottom: 0, top: 0 }}
+              dragConstraints={{ bottom: 0 }}
               dragMomentum={false}
               // dragElastic={0.8}
               drag="y"
-              className="absolute top-[calc(100%_-_96px)] z-20 mx-auto flex h-fit w-full flex-col justify-start overflow-y-scroll rounded-t-3xl bg-white p-6"
+              className="absolute top-[calc(100%_-_120px)] z-20 mx-auto flex h-fit w-full flex-col justify-start overflow-y-scroll rounded-t-3xl bg-white p-6"
             >
               <div className="relative flex h-full flex-col items-center justify-start gap-4">
-                <div className="h-3 w-20 rounded-full bg-slate-400"></div>
+                <div className="h-3 w-20 rounded-full bg-slate-600"></div>
                 <motion.div className="text-center">
                   {venues.length} homes found
                 </motion.div>

@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ThemeContext from "../../utils/ThemeContext";
 import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function Hamburger({ navOpen, setNavOpen, className }) {
   const { isDarkTheme } = useContext(ThemeContext);
@@ -80,3 +81,9 @@ export default function MobileNav() {
     </>
   );
 }
+
+Hamburger.propTypes = {
+  navOpen: PropTypes.bool,
+  setNavOpen: PropTypes.func,
+  className: PropTypes.string,
+};
