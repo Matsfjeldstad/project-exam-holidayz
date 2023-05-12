@@ -28,8 +28,27 @@ const supabaseApi = createApi({
         return { data };
       },
     }),
+    getOnMapVenues: builder.query({
+      queryFn: async (bounds) => {
+        const { data, error } = await supabase.rpc("venues_within_bounds", {
+          min_lat: bounds[1],
+          min_lng: bounds[0],
+          max_lat: bounds[3],
+          max_lng: bounds[2],
+        });
+        if (error) {
+          console.log();
+          throw { error };
+        }
+        return { data };
+      },
+    }),
   }),
 });
 
-export const { useGetVenuesQuery, useGetSingleVenueQuery } = supabaseApi;
+export const {
+  useGetVenuesQuery,
+  useGetSingleVenueQuery,
+  useGetOnMapVenuesQuery,
+} = supabaseApi;
 export { supabaseApi };
