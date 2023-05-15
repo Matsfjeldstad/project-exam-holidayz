@@ -16,6 +16,7 @@ import { useMediaQuery } from "react-responsive";
 
 const MapComponent = () => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isDesktop = useMediaQuery({ query: "(min-width: 1224px)" });
   const {
     isDarkTheme,
     setIsDarkTheme,
@@ -103,53 +104,55 @@ const MapComponent = () => {
   });
 
   return (
-    <div className="relative mt-20 h-full w-full">
-      {/* <div className="z-30 flex h-fit flex-col gap-1 bg-white px-10 lg:w-3/5">
-        <h1 className="text-4xl font-bold">Venues</h1>
-        <AnimatePresence>
-          {venues.length > 0 ? (
-            <div className="mt-10 flex flex-col gap-4">
-              <motion.div>{venues.length} homes found</motion.div>
+    <div className="relative mt-20 flex h-full w-full">
+      {isDesktop && (
+        <div className="z-30 flex h-fit flex-col gap-1 bg-white px-10 lg:w-3/5">
+          <h1 className="text-4xl font-bold">Venues</h1>
+          <AnimatePresence>
+            {venues.length > 0 ? (
+              <div className="mt-10 flex flex-col gap-4">
+                <motion.div>{venues.length} homes found</motion.div>
+                <motion.div
+                  animate="show"
+                  className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3"
+                >
+                  {venues.map((venue) => (
+                    <VenueCard key={venue.id} data={venue} />
+                  ))}
+                </motion.div>
+              </div>
+            ) : (
               <motion.div
-                animate="show"
-                className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3"
+                initial={{ opacity: 0, translateY: 20 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                exit={{ opacity: 0, translateY: 20 }}
+                className="mt-10 flex flex-col gap-4"
               >
-                {venues.map((venue) => (
-                  <VenueCard key={venue.id} data={venue} />
-                ))}
+                <h2 className="text-xl">No Venues in this area...</h2>
+                <Link to={"/venues/supabase"}>
+                  <button className="w-fit rounded-full bg-gray-900 px-4 py-2 text-white">
+                    Check all venues
+                  </button>
+                </Link>
               </motion.div>
-            </div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, translateY: 20 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              exit={{ opacity: 0, translateY: 20 }}
-              className="mt-10 flex flex-col gap-4"
-            >
-              <h2 className="text-xl">No Venues in this area...</h2>
-              <Link to={"/venues/supabase"}>
-                <button className="w-fit rounded-full bg-gray-900 px-4 py-2 text-white">
-                  Check all venues
-                </button>
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div> */}
+            )}
+          </AnimatePresence>
+        </div>
+      )}
       <div className=" h-[calc(100vh_-_80px)] w-full bg-black lg:sticky lg:top-20 lg:w-2/5">
         <div className="h-full">
           {isTabletOrMobile && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              dragConstraints={{ bottom: 0 }}
+              dragConstraints={{ bottom: -100 }}
               dragMomentum={false}
-              // dragElastic={0.8}
+              dragElastic={0.8}
               drag="y"
-              className="absolute top-[calc(100%_-_120px)] z-20 mx-auto flex h-fit w-full flex-col justify-start overflow-y-scroll rounded-t-3xl bg-white p-6"
+              className="absolute bottom-0 top-[calc(100%_-_120px)] z-20 mx-auto flex h-fit w-full flex-col justify-start rounded-t-3xl bg-white p-6"
             >
               <div className="relative flex h-full flex-col items-center justify-start gap-4">
-                <div className="h-3 w-20 rounded-full bg-slate-600"></div>
+                <div className="h-3 w-20 rounded-full bg-[#444]"></div>
                 <motion.div className="text-center">
                   {venues.length} homes found
                 </motion.div>
