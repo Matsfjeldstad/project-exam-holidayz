@@ -32,7 +32,7 @@ export default function Layout() {
         >
           <Navbar></Navbar>
         </header>
-        <main className="">
+        <main className=" min-h-screen font-poppins">
           <Router />
         </main>
         <footer>hello</footer>

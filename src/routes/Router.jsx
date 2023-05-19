@@ -4,15 +4,18 @@ import AllVenuesSupabase from "../pages/AllVenuesSupabase";
 import SpesificVenueSupabase from "../pages/SpesificVenueSupabase";
 import SearchMap from "../pages/SearchMap";
 import Login from "../pages/Login";
+import Signup from "../pages/SignUp";
+// import ProtectedRoute from "./ProtectedRoute";
 
 export default function Router() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route index element={<Home />} />
         <Route path="/venues/supabase" element={<AllVenuesSupabase />} />
         <Route path="/search" element={<SearchMap />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/venue/supabase/:id" element={<SpesificVenueSupabase />} />
       </Routes>
     </>
