@@ -37,8 +37,41 @@ const supabaseApi = createApi({
           max_lng: bounds[2],
         });
         if (error) {
-          console.log();
+          console.log(error);
           throw { error };
+        }
+        return { data };
+      },
+    }),
+    logIn: builder.mutation({
+      queryFn: async (credentials) => {
+        const { data, error } = await supabase.auth.signInWithPassword(
+          credentials
+        );
+        if (error) {
+          console.log(error);
+          throw { error };
+        }
+        console.log(data);
+        return { data };
+      },
+    }),
+    signUp: builder.mutation({
+      queryFn: async ({ email, password, first_name, last_name }) => {
+        const { data, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              first_name: first_name,
+              last_name: last_name,
+            },
+          },
+        });
+
+        if (error) {
+          console.log(error);
+          throw error;
         }
         return { data };
       },
@@ -50,5 +83,7 @@ export const {
   useGetVenuesQuery,
   useGetSingleVenueQuery,
   useGetOnMapVenuesQuery,
+  useLogInMutation,
+  useSignUpMutation,
 } = supabaseApi;
 export { supabaseApi };
