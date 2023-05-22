@@ -43,6 +43,59 @@ const supabaseApi = createApi({
         return { data };
       },
     }),
+    getUser: builder.query({
+      queryFn: async (userId) => {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .single();
+        if (error) {
+          console.log(error);
+          throw { error };
+        }
+        return { data };
+      },
+    }),
+    getUserVenues: builder.query({
+      queryFn: async (userId) => {
+        const { data, error } = await supabase
+          .from("venues")
+          .select("*")
+          .eq("owner_id", userId);
+        if (error) {
+          console.log(error);
+          throw { error };
+        }
+        return { data };
+      },
+    }),
+    getOwnersBookings: builder.query({
+      queryFn: async (userId) => {
+        const { data, error } = await supabase
+          .from("bookings")
+          .select("*")
+          .eq("venue_owner", userId);
+        if (error) {
+          console.log(error);
+          throw { error };
+        }
+        return { data };
+      },
+    }),
+    getTodaysChekinChekout: builder.query({
+      queryFn: async (owner_id) => {
+        const { data, error } = await supabase.rpc(
+          "get_checkins_checkouts_today",
+          { owner_id: owner_id }
+        );
+        if (error) {
+          console.log(error);
+          throw { error };
+        }
+        return { data };
+      },
+    }),
     logIn: builder.mutation({
       queryFn: async (credentials) => {
         const { data, error } = await supabase.auth.signInWithPassword(
@@ -57,14 +110,14 @@ const supabaseApi = createApi({
       },
     }),
     signUp: builder.mutation({
-      queryFn: async ({ email, password, first_name, last_name }) => {
+      queryFn: async ({ email, password, name, is_host }) => {
         const { data, error } = await supabase.auth.signUp({
           email: email,
           password: password,
           options: {
             data: {
-              first_name: first_name,
-              last_name: last_name,
+              name: name,
+              is_host: is_host,
             },
           },
         });
@@ -83,6 +136,10 @@ export const {
   useGetVenuesQuery,
   useGetSingleVenueQuery,
   useGetOnMapVenuesQuery,
+  useGetUserQuery,
+  useGetUserVenuesQuery,
+  useGetOwnersBookingsQuery,
+  useGetTodaysChekinChekoutQuery,
   useLogInMutation,
   useSignUpMutation,
 } = supabaseApi;

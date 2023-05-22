@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ThemeContext from "../../utils/ThemeContext";
 import { useMediaQuery } from "react-responsive";
 import MobileNav from "./MobileNav";
-import { useAuth } from "../../utils/auth";
+import { useAuth } from "../../utils/Auth";
 
 export default function Navbar() {
   const [isLogedIn, setIsLogedIn] = useState(false);

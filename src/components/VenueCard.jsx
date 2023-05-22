@@ -10,6 +10,7 @@ export default function VenueCard({ data }) {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, translateY: 20 }}
+      whileHover={{ y: -8 }}
       className="group flex cursor-pointer flex-col overflow-hidden font-poppins"
     >
       <div className="relative flex h-80 w-full justify-end overflow-hidden p-4">
@@ -63,7 +64,7 @@ export default function VenueCard({ data }) {
         className="flex flex-col gap-1 py-4"
       >
         <div className="flex justify-between">
-          <h3 className="font-bold">{data.name}</h3>
+          <h3 className="font-bold">{data.title}</h3>
           <div>{data.rating}</div>
         </div>
         <div className="text-sm text-gray-500">
