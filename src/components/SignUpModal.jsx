@@ -11,14 +11,15 @@ export default function SignupModal() {
     initialValues: {
       email: "",
       password: "",
-      first_name: "",
-      last_name: "",
+      name: "",
+      is_host: false,
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string().required("Password is required").min(6),
+      name: Yup.string().required("name is required"),
     }),
     onSubmit: (values) => {
       signUp(values);
@@ -33,20 +34,20 @@ export default function SignupModal() {
   isError && console.log(error);
   return (
     <div className="mx-auto max-w-xl p-6">
-      <h4 className="text-center">Login</h4>
+      <h4 className="">Login</h4>
       <h1 className="mt-4 text-2xl font-bold">Welcome to Holidaze</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6 flex flex-col gap-4">
         <label className="flex flex-col gap-1">
-          <span className="text-lg">First Name</span>
-          {formik.touched.first_name && formik.errors.first_name && (
+          <span className="text-lg">Name</span>
+          {formik.touched.name && formik.errors.name && (
             <motion.div
-              key={formik.errors.first_name}
+              key={formik.errors.name}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="rounded-md bg-red-300 p-2 text-red-900"
             >
-              {formik.errors.first_name}
+              {formik.errors.name}
             </motion.div>
           )}
           <input
@@ -54,38 +55,12 @@ export default function SignupModal() {
               emailErrorClass ? emailErrorClass : "border-gray-300"
             } p-2`}
             type="text"
-            name="first_name"
-            placeholder="Your first name"
+            name="name"
+            placeholder="Your name"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            value={formik.values.first_name}
-            id="first_name"
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-lg">Last Name</span>
-          {formik.touched.last_name && formik.errors.last_name && (
-            <motion.div
-              key={formik.errors.last_name}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="rounded-md bg-red-300 p-2 text-red-900"
-            >
-              {formik.errors.last_name}
-            </motion.div>
-          )}
-          <input
-            className={`rounded-md border-2 ${
-              emailErrorClass ? emailErrorClass : "border-gray-300"
-            } p-2`}
-            type="text"
-            name="last_name"
-            placeholder="Your last name"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            value={formik.values.last_name}
-            id="last_name"
+            value={formik.values.name}
+            id="name"
           />
         </label>
         <label className="flex flex-col gap-1">
@@ -136,6 +111,19 @@ export default function SignupModal() {
             onChange={formik.handleChange}
             value={formik.values.password}
             id="password"
+          />
+        </label>
+        <label className="flex w-fit flex-col gap-1">
+          <span className="text-lg">Is Host?</span>
+          <input
+            className={`h-5 w-5 checked:bg-red-100 `}
+            type="checkbox"
+            name="is_host"
+            placeholder="Is Host?"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.is_host}
+            id="is_host"
           />
         </label>
         <Button type="submit">

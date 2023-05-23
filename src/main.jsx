@@ -5,16 +5,16 @@ import { BrowserRouter } from "react-router-dom";
 import Layout from "./Layout.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import AuthProvider from "./utils/auth";
+import { AuthProvider } from "./utils/Auth";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <Provider store={store}>
+    <Provider store={store}>
+      <AuthProvider>
         <BrowserRouter>
           <Layout />
         </BrowserRouter>
-      </Provider>
-    </AuthProvider>
+      </AuthProvider>
+    </Provider>
   </React.StrictMode>
 );

@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import * as Yup from "yup";
 import Button from "../components/ui/Button";
 import { useLogInMutation } from "../store/modules/apiSlice";
+import { Navigate } from "react-router-dom";
 
 export default function LoginModal() {
-  const [logIn, { isLoading }] = useLogInMutation();
+  const [logIn, { data, isLoading, isError, error }] = useLogInMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -19,7 +20,6 @@ export default function LoginModal() {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: (values) => {
-      console.log(isLoading);
       logIn(values);
     },
   });
@@ -29,9 +29,13 @@ export default function LoginModal() {
   const passwordErrorClass =
     formik.touched.password && formik.errors.password && "border-red-500";
 
+  if (data) {
+    return <Navigate to="/dashboard" />;
+  }
+
   return (
     <div className="mx-auto max-w-xl p-6">
-      <h4 className="text-center">Login</h4>
+      <h4 className="">Login</h4>
       <h1 className="mt-4 text-2xl font-bold">Welcome to Holidaze</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6 flex flex-col gap-4">
         <label className="flex flex-col gap-1">
@@ -111,6 +115,16 @@ export default function LoginModal() {
       <div className="mt-6">
         <span className="text-lg">Dont have an account?</span>
       </div>
+      {isError && (
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute left-6 top-20 z-[100] flex justify-center gap-2 rounded-sm bg-red-600 p-2 text-white"
+        >
+          {error.message}
+          <div>x</div>
+        </motion.div>
+      )}
     </div>
   );
 }
