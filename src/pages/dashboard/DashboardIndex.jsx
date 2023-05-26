@@ -74,9 +74,7 @@ export default function DashboardIndex() {
     isLoading,
   } = useGetUserQuery(auth.user.id);
 
-  const {
-    data: bookings,
-  } = useGetOwnersBookingsQuery(auth.user.id);
+  const { data: bookings } = useGetOwnersBookingsQuery(auth.user.id);
 
   if (isLoading) return <div>loading...</div>;
 

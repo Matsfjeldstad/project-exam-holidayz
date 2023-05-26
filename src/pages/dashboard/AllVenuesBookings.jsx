@@ -63,122 +63,126 @@ export function BookingsTable({
   setDeleteModalIsOpen,
   setmodalObject,
 }) {
-  if (bookings.length === 0) {
-    return (
-      <div className="mt-10 text-gray-700">
-        Your venues has no bookings yet..
-      </div>
-    );
+  if (bookings) {
+    if (bookings.length === 0) {
+      return (
+        <div className="mt-10 text-gray-700">
+          Your venues has no bookings yet..
+        </div>
+      );
+    }
+
+    if (bookings.length > 0)
+      return (
+        <table className="mt-10 w-full">
+          <thead>
+            <tr className="text-left">
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]"></th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Booked by
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Venue Booked
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                status
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Total Price
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Created
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                No. Of Nights
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Booked From
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Booked To
+              </th>
+              <th className="font-poppins text-sm font-semibold text-[#4B5563]">
+                Delete
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <AnimatePresence>
+              {bookings.map((booking) => {
+                const created_at = format(
+                  new Date(booking.created_at),
+                  "dd.MM.yyyy HH:mm"
+                );
+                const BookingStartDate = format(
+                  new Date(booking.booking_start_date),
+                  "dd.MM.yyyy"
+                );
+                const BookingEndDate = format(
+                  new Date(booking.booking_end_date),
+                  "dd.MM.yyyy"
+                );
+
+                return (
+                  <motion.tr
+                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    key={booking.booking_id}
+                    className="border-b border-[#E2E8F0]"
+                  >
+                    <td className="py-4">
+                      <AvatarImg
+                        src={booking.profile_img}
+                        alt={booking.name}
+                        name={booking.name}
+                      />
+                    </td>
+                    <td className="py-4">{booking.name}</td>
+                    <td className="pr-4">
+                      <StatusSelectInput booking={booking} />
+                    </td>
+                    <td className="py-4">
+                      <Link to={`/venue/supabase/${booking.venue_id}`}>
+                        {booking.venue_title}
+                      </Link>
+                    </td>
+                    <td className="py-4">{booking.total_price}nok</td>
+                    <td className="py-4">{created_at}</td>
+                    <td className="py-4">
+                      {differenceInDays(
+                        new Date(booking.booking_end_date),
+                        new Date(booking.booking_start_date)
+                      )}
+                    </td>
+                    <td className="py-4">{BookingStartDate}</td>
+                    <td className="py-4">{BookingEndDate}</td>
+                    <td className="py-4">
+                      <Trash
+                        onClick={() => {
+                          setmodalObject({
+                            id: booking.booking_id,
+                            title: booking.venue_title,
+                            name: booking.name,
+                            img: booking.profile_img,
+                            date_start: BookingStartDate,
+                            date_end: BookingEndDate,
+                          });
+                          setDeleteModalIsOpen(true);
+                        }}
+                        className="h-8 w-8 cursor-pointer rounded-md fill-red-500 duration-100 hover:bg-red-100"
+                      />
+                    </td>
+                  </motion.tr>
+                );
+              })}
+            </AnimatePresence>
+          </tbody>
+        </table>
+      );
   }
 
-  if (bookings.length > 0)
-    return (
-      <table className="mt-10 w-full">
-        <thead>
-          <tr className="text-left">
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]"></th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Booked by
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Venue Booked
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              status
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Total Price
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Created
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              No. Of Nights
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Booked From
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Booked To
-            </th>
-            <th className="font-poppins text-sm font-semibold text-[#4B5563]">
-              Delete
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <AnimatePresence>
-            {bookings.map((booking) => {
-              const created_at = format(
-                new Date(booking.created_at),
-                "dd.MM.yyyy HH:mm"
-              );
-              const BookingStartDate = format(
-                new Date(booking.booking_start_date),
-                "dd.MM.yyyy"
-              );
-              const BookingEndDate = format(
-                new Date(booking.booking_end_date),
-                "dd.MM.yyyy"
-              );
-
-              return (
-                <motion.tr
-                  animate={{ opacity: 1, y: 0 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  key={booking.booking_id}
-                  className="border-b border-[#E2E8F0]"
-                >
-                  <td className="py-4">
-                    <AvatarImg
-                      src={booking.profile_img}
-                      alt={booking.name}
-                      name={booking.name}
-                    />
-                  </td>
-                  <td className="py-4">{booking.name}</td>
-                  <td className="pr-4">
-                    <StatusSelectInput booking={booking} />
-                  </td>
-                  <td className="py-4">
-                    <Link to={`/venue/supabase/${booking.venue_id}`}>
-                      {booking.venue_title}
-                    </Link>
-                  </td>
-                  <td className="py-4">{booking.total_price}nok</td>
-                  <td className="py-4">{created_at}</td>
-                  <td className="py-4">
-                    {differenceInDays(
-                      new Date(booking.booking_end_date),
-                      new Date(booking.booking_start_date)
-                    )}
-                  </td>
-                  <td className="py-4">{BookingStartDate}</td>
-                  <td className="py-4">{BookingEndDate}</td>
-                  <td className="py-4">
-                    <Trash
-                      onClick={() => {
-                        setmodalObject({
-                          id: booking.booking_id,
-                          title: booking.venue_title,
-                          name: booking.name,
-                          img: booking.profile_img,
-                          date_start: BookingStartDate,
-                          date_end: BookingEndDate,
-                        });
-                        setDeleteModalIsOpen(true);
-                      }}
-                      className="h-8 w-8 cursor-pointer rounded-md fill-red-500 duration-100 hover:bg-red-100"
-                    />
-                  </td>
-                </motion.tr>
-              );
-            })}
-          </AnimatePresence>
-        </tbody>
-      </table>
-    );
+  return <div>loading...</div>;
 }
 
 export default function AllbookingsBooking() {
