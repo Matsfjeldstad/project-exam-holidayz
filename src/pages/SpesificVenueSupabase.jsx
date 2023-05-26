@@ -50,16 +50,9 @@ export default function SpesificVenueSupabase() {
     return <div>{error}</div>;
   }
 
-  let venueData;
-
-  if (data) {
-    venueData = data[0];
-    console.log(venueData);
-  }
-
   const bookedDates =
-    venueData.bookings && venueData.bookings.length > 0
-      ? venueData.bookings.map((booking) => {
+    data.bookings && data.bookings.length > 0
+      ? data.bookings.map((booking) => {
           return {
             from: new Date(booking.booking_start_date),
             to: new Date(booking.booking_end_date),
@@ -67,53 +60,51 @@ export default function SpesificVenueSupabase() {
         })
       : [];
 
-  if (venueData) {
+  if (data) {
     return (
       <div className="mx-auto mt-32 flex max-w-[1500px] flex-col gap-14 px-10">
         <div className="">
-          <h1 className="mb-2 text-4xl font-medium">{venueData.title}</h1>
+          <h1 className="mb-2 text-4xl font-medium">{data.title}</h1>
           <div className="flex gap-2">
             <div>4.5</div>
             <div className="font-medium text-gray-700 underline">
-              {venueData.location &&
-                venueData.location.address.city &&
-                venueData.location.address.country &&
-                venueData.location.address.city !== "Unknown" &&
-                venueData.location.address.country !== "Unknown" &&
-                `${venueData.location.address.city}, ${venueData.location.address.country}`}
+              {data.location &&
+                data.location.address.city &&
+                data.location.address.country &&
+                data.location.address.city !== "Unknown" &&
+                data.location.address.country !== "Unknown" &&
+                `${data.location.address.city}, ${data.location.address.country}`}
             </div>
           </div>
         </div>
-        {venueData.media.length > 0 && (
-          <ImageDisplayGrid MediaArray={venueData.media} />
-        )}
+        {data.media.length > 0 && <ImageDisplayGrid MediaArray={data.media} />}
         <section className="flex justify-between gap-10">
           <div className=" flex w-4/5 max-w-5xl flex-col gap-4">
             <h3 className="text-2xl font-medium">Description</h3>
-            <p>{venueData.description}</p>
+            <p>{data.description}</p>
           </div>
           <div className="flex w-1/5 flex-col gap-4">
             <h3 className="text-2xl font-medium">Facilities</h3>
             <div className="">
-              {venueData.meta.wifi && (
+              {data.meta.wifi && (
                 <div className="flex items-center gap-2">
                   <Wifi />
                   <div>Wifi</div>
                 </div>
               )}
-              {venueData.meta.parking && (
+              {data.meta.parking && (
                 <div className="flex items-center gap-2">
                   <Parking />
                   <div>Free Parking</div>
                 </div>
               )}
-              {venueData.meta.pets && (
+              {data.meta.pets && (
                 <div className="flex items-center gap-2">
                   <PawPrint />
                   <div>Pets Allowed</div>
                 </div>
               )}
-              {venueData.meta.breakfast && (
+              {data.meta.breakfast && (
                 <div className="flex items-center gap-2">
                   <ForkKnife />
                   <div>Breakfast</div>
@@ -124,19 +115,19 @@ export default function SpesificVenueSupabase() {
         </section>
         <section className="flex flex-col gap-4">
           <h3 className="text-2xl font-medium">Location</h3>
-          {venueData.location.lng !== 0 && venueData.location.lat !== 0 ? (
+          {data.location.lng !== 0 && data.location.lat !== 0 ? (
             <div className="flex overflow-hidden rounded-lg border">
               <div className="relative h-[560px] w-full">
                 <ReactMapGLMap
                   center={[
-                    venueData.location.coordinates.lon,
-                    venueData.location.coordinates.lat,
+                    data.location.coordinates.lon,
+                    data.location.coordinates.lat,
                   ]}
                   zoom={13}
                   marker={{
-                    lng: venueData.location.coordinates.lon,
-                    lat: venueData.location.coordinates.lat,
-                    price: venueData.price_per_night,
+                    lng: data.location.coordinates.lon,
+                    lat: data.location.coordinates.lat,
+                    price: data.price_per_night,
                   }}
                 />
               </div>
@@ -174,21 +165,21 @@ export default function SpesificVenueSupabase() {
                 <div>
                   from{" "}
                   <span className="text-2xl font-bold">
-                    {venueData && venueData.price_per_night}
+                    {data && data.price_per_night}
                   </span>
                   nok per night
                 </div>
-                <div> ⭐ {venueData && venueData.rating} </div>
+                <div> ⭐ {data && data.rating} </div>
               </div>
               <div className="flex gap-2">
                 <div className="flex items-center gap-2">
-                  <div>Max Guests {venueData && venueData.maxGuests}</div>
-                  {(venueData && venueData.meta.wifi && (
+                  <div>Max Guests {data && data.maxGuests}</div>
+                  {(data && data.meta.wifi && (
                     <>
                       <Wifi /> Free Wifi
                     </>
                   )) ||
-                    (venueData && venueData.meta.parking && (
+                    (data && data.meta.parking && (
                       <div className="flex items-center">
                         <Parking className="w-8" /> Free Parking
                       </div>
@@ -246,7 +237,7 @@ export default function SpesificVenueSupabase() {
                       type="number"
                       min="1"
                       defaultValue={1}
-                      max={venueData.maxGuests}
+                      max={data.maxGuests}
                     ></input>
                   </label>
                 </div>
@@ -255,7 +246,7 @@ export default function SpesificVenueSupabase() {
                   className="w-full rounded-md bg-[#FF004D] p-3 text-white"
                   onClick={() => {
                     console.log({
-                      venueId: venueData.id,
+                      venueId: data.id,
                       from: dateRange.from,
                       to: dateRange.to,
                     });

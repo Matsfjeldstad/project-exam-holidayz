@@ -1,11 +1,13 @@
 import { Outlet } from "react-router-dom";
-import DashBoardNav from "./DashBoardNav";
+import DashBoardNav from "../../components/ui/DashBoardNav";
 
 export default function DashboardLayout() {
   return (
-    <div className="flex flex-col px-6 pt-20 font-poppins md:flex-row">
+    <div className="flex flex-col font-poppins md:flex-row">
       <DashBoardNav />
-      <Outlet />
+      <div className="w-full">
+        <Outlet />
+      </div>
     </div>
   );
 }
