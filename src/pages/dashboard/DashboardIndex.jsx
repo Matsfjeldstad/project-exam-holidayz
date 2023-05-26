@@ -1,16 +1,20 @@
 import PropTypes from "prop-types";
 import {
+  useGetOwnersBookingsQuery,
   useGetTodaysChekinChekoutQuery,
   useGetUserQuery,
   useGetUserVenuesQuery,
 } from "../../store/modules/apiSlice";
 import Button from "../../components/ui/Button";
+import AvatarImg from "../../components/ui/AvatarImg";
 import VenueCard from "../../components/VenueCard";
 import { HandWaving, Key } from "../../assets/icons/Icons";
 import { motion } from "framer-motion";
 import { useAuth } from "../../utils/Auth";
 import SimpleLineChart from "../../components/ui/SimpleLineChart";
 import { OwnerVenueBookingsTable } from "../../components/OwnerVenueBookingsTable";
+import { sevenDayData } from "../../data/sevenDayData";
+import { BookingsTable } from "./AllVenuesBookings";
 
 export function OwnerVenueData({ user_id }) {
   const { data, error, isLoading } = useGetUserVenuesQuery(user_id);
@@ -59,15 +63,6 @@ export function TodaysChekinsAndChekOut({ userId, checkIns, checkOuts }) {
 }
 
 export default function DashboardIndex() {
-  const sevenDayData = [
-    { date: "25.05.2023", income: 23000 },
-    { date: "26.05.2023", income: 14000 },
-    { date: "27.05.2023", income: 2500 },
-    { date: "28.05.2023", income: 6000 },
-    { date: "29.05.2023", income: 17000 },
-    { date: "30.05.2023", income: 2000 },
-    { date: "31.05.2023", income: 14000 },
-  ];
   // const [chartData, setChartData] = useState(sevenDayData);
 
   const auth = useAuth();
@@ -79,15 +74,30 @@ export default function DashboardIndex() {
     isLoading,
   } = useGetUserQuery(auth.user.id);
 
+  const {
+    data: bookings,
+  } = useGetOwnersBookingsQuery(auth.user.id);
+
   if (isLoading) return <div>loading...</div>;
 
   if (isError) return <div>{error.message}</div>;
 
   return (
-    <div className="flex flex-col gap-10 bg-gray-100 p-4 md:w-2/3 md:px-10 lg:w-3/4">
+    <div className="flex w-full flex-col gap-10 bg-gray-100 p-4 pt-6 md:px-10">
       {userData.is_host && (
         <>
           <div className="flex flex-col gap-3">
+            <div className="mb-10">
+              <AvatarImg src={userData.profile_img} name={userData.name} />
+              <h1 className="text-2xl font-semibold">
+                Good Day, {userData.name}{" "}
+              </h1>
+              <div className="text-sm text-gray-500">
+                {userData.is_host
+                  ? "You have earned 4000kr today"
+                  : "You have spent 4000kr today"}
+              </div>
+            </div>
             <h2 className="text-xl font-semibold">Whats Happening Today?</h2>
             <div className="flex gap-2">
               <div className="flex w-full flex-col gap-2.5 rounded-md border bg-white p-4 shadow-lg">
@@ -176,7 +186,7 @@ export default function DashboardIndex() {
           </div>
           <div className="flex flex-col gap-3">
             <h3 className="text-xl font-semibold">Newest Bookings</h3>
-            <OwnerVenueBookingsTable user_id={userData.id} />
+            <BookingsTable bookings={bookings} />
           </div>
         </>
       )}

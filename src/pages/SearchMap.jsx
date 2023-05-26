@@ -103,8 +103,8 @@ const MapComponent = () => {
   });
 
   return (
-    <div className="relative mt-20 h-full w-full">
-      {/* <div className="z-30 flex h-fit flex-col gap-1 bg-white px-10 lg:w-3/5">
+    <div className="relative mt-20 flex h-full w-full">
+      <div className="z-30 flex h-fit flex-col gap-1 bg-white px-10 lg:w-4/6">
         <h1 className="text-4xl font-bold">Venues</h1>
         <AnimatePresence>
           {venues.length > 0 ? (
@@ -135,8 +135,8 @@ const MapComponent = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </div> */}
-      <div className=" h-[calc(100vh_-_80px)] w-full bg-black lg:sticky lg:top-20 lg:w-2/5">
+      </div>
+      <div className=" h-[calc(100vh_-_80px)] w-full bg-black lg:sticky lg:top-20 lg:w-2/6">
         <div className="h-full">
           {isTabletOrMobile && (
             <motion.div

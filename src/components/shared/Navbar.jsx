@@ -47,14 +47,19 @@ export default function Navbar() {
           </Link>
           <a className={`relative ${hoverLinkClass}`}>Location</a>
           {isLogedIn && (
-            <Link
-              className={`relative ${hoverLinkClass}`}
-              onClick={() => {
-                auth.signOut();
-              }}
-            >
-              Log out
-            </Link>
+            <>
+              <Link to="/dashboard" className={`relative ${hoverLinkClass}`}>
+                Dashboard
+              </Link>
+              <Link
+                className={`relative ${hoverLinkClass}`}
+                onClick={() => {
+                  auth.signOut();
+                }}
+              >
+                Log out
+              </Link>
+            </>
           )}
 
           {!isLogedIn && (
