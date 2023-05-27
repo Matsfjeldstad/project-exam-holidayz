@@ -5,7 +5,6 @@ import {
   Cabin,
   Campervan,
   Castle,
-  // Cabin,
   Cave,
   Dome,
   Farm,

@@ -8,7 +8,11 @@ import { useAuth } from "../../utils/Auth";
 import { Link } from "react-router-dom";
 import { Pencil, Plus, Trash } from "../../assets/icons/Icons";
 import DeleteModal from "../../components/modals/DeleteModal";
-import { AnimatePresence, motion } from "framer-motion";
+let framerMotion;
+import("framer-motion").then((module) => {
+  framerMotion = module;
+  // Now you can use framerMotion.AnimatePresence and framerMotion.motion
+});
 
 export default function UserVenues() {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
@@ -62,14 +66,14 @@ export default function UserVenues() {
             </tr>
           </thead>
           <tbody>
-            <AnimatePresence>
+            <framerMotion.AnimatePresence>
               {data.map((venue) => {
                 const created_at = format(
                   new Date(venue.created_at),
                   "dd.MM.yyyy HH:mm"
                 );
                 return (
-                  <motion.tr
+                  <framerMotion.motion.tr
                     animate={{ opacity: 1, y: 0 }}
                     initial={{ opacity: 0, y: 20 }}
                     exit={{ opacity: 0, y: -20 }}
@@ -101,10 +105,10 @@ export default function UserVenues() {
                         className="h-8 w-8 cursor-pointer rounded-md fill-red-500 duration-100 hover:bg-red-100"
                       />
                     </td>
-                  </motion.tr>
+                  </framerMotion.motion.tr>
                 );
               })}
-            </AnimatePresence>
+            </framerMotion.AnimatePresence>
           </tbody>
         </table>
       ) : (
@@ -121,7 +125,7 @@ export default function UserVenues() {
           </Link>
         </div>
       )}
-      <AnimatePresence>
+      <framerMotion.AnimatePresence>
         {deleteModalIsOpen && (
           <DeleteModal
             modalObject={modalObject}
@@ -130,7 +134,7 @@ export default function UserVenues() {
             type="venue"
           />
         )}
-      </AnimatePresence>
+      </framerMotion.AnimatePresence>
       {console.log(data)}
     </div>
   );

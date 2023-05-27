@@ -125,7 +125,7 @@ export default function Home() {
             className="group relative hidden h-[500px] w-[600px] items-center justify-center overflow-hidden rounded-[150px] lg:flex"
           >
             <img
-              src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
+              src="/luke-stackpoole-eWqOgJ-lfiI-unsplash.webp"
               alt="hero"
               className="absolute left-0 top-0 h-full w-full object-cover"
             />
@@ -144,27 +144,27 @@ export default function Home() {
               className="group relative col-span-2 row-span-1 flex cursor-pointer items-end overflow-hidden rounded-lg p-6 text-2xl font-bold sm:col-span-1 lg:row-span-2"
               text="in Norway"
               to="venues/country/norway"
-              imgLink="https://images.unsplash.com/photo-1602836948295-14b195efa63d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1965&q=80"
+              imgLink="/taneli-lahtinen-FzthdgL6vBI-unsplash.webp"
             />
             {/* <div className="col-span-1 row-span-1 rounded-lg bg-red-300"></div> */}
             <NavigationCard
               className="group relative col-span-2 row-span-1 flex cursor-pointer items-end overflow-hidden rounded-lg bg-blue-300 p-6 text-2xl font-bold sm:col-span-1"
               text="Live in a caravan"
               to="/venues/caravan"
-              imgLink="https://images.unsplash.com/photo-1594495894542-a46cc73e081a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=871&q=80"
+              imgLink="/kevin-schmid--grs8iMGqQE-unsplash.webp"
             />
 
             <NavigationCard
               className="group relative col-span-2 col-start-1 row-span-1 flex cursor-pointer items-end overflow-hidden rounded-lg bg-blue-300 p-6 text-2xl font-bold lg:col-span-1 lg:col-start-2"
               text="Chill in a cabin"
               to="/venues/cabin"
-              imgLink="https://images.unsplash.com/photo-1604609165678-096d20fab1ad?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80"
+              imgLink="/nikita-kachanovsky-pvcB8ns_jOY-unsplash.webp"
             />
             <NavigationCard
               className="group relative col-span-2 col-start-1 row-span-1 row-start-1 flex cursor-pointer items-end overflow-hidden rounded-lg bg-blue-300 p-6 text-2xl font-bold"
               text="Lighthouse"
               to="/venues/lighthouse"
-              imgLink="https://images.unsplash.com/photo-1540056145750-91179d279b66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1888&q=80"
+              imgLink="/clay-banks-XdiNTvxhDVI-unsplash.webp"
             />
           </div>
         </div>
