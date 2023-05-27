@@ -43,7 +43,7 @@ function Hamburger({ navOpen, setNavOpen, className }) {
   );
 }
 
-export default function MobileNav() {
+export default function MobileNav({ auth }) {
   const [navOpen, setNavOpen] = useState(false);
   return (
     <>
@@ -60,7 +60,7 @@ export default function MobileNav() {
               Holidaze
             </NavLink>
             <NavLink
-              to={"/venues/supabase"}
+              to={"/venues/all"}
               className="text-xl font-bold text-black"
               onClick={() => setNavOpen(false)}
             >
@@ -73,8 +73,25 @@ export default function MobileNav() {
             >
               Location
             </NavLink>
-            <NavLink className="text-xl font-bold text-black">Login</NavLink>
-            <NavLink className="text-xl font-bold text-black">Signup</NavLink>
+            {auth.user ? (
+              <>
+                <NavLink className="text-xl font-bold text-black">
+                  Dashboard
+                </NavLink>
+                <NavLink className="text-xl font-bold text-black">
+                  Logout
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink className="text-xl font-bold text-black">
+                  Login
+                </NavLink>
+                <NavLink className="text-xl font-bold text-black">
+                  Signup
+                </NavLink>
+              </>
+            )}
           </nav>
         </motion.div>
       )}
@@ -86,4 +103,8 @@ Hamburger.propTypes = {
   navOpen: PropTypes.bool,
   setNavOpen: PropTypes.func,
   className: PropTypes.string,
+};
+
+MobileNav.propTypes = {
+  auth: PropTypes.object,
 };

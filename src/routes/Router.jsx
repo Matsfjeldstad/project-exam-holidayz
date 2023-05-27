@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
-import AllVenuesSupabase from "../pages/AllVenuesSupabase";
+import AllVenues from "../pages/AllVenues";
 import SpesificVenueSupabase from "../pages/SpesificVenueSupabase";
 import SearchMap from "../pages/SearchMap";
 import Login from "../pages/Login";
@@ -14,17 +14,19 @@ import EditVenue from "../pages/dashboard/EditVenue";
 import ProfileSettings from "../pages/dashboard/ProfileSettings";
 import AnalyticsPage from "../pages/dashboard/AnalyticsPage";
 import AllVenuesBooking from "../pages/dashboard/AllVenuesBookings";
+import VenueByCategory from "../pages/VenueByCategory";
 
 export default function Router() {
   return (
     <>
       <Routes>
         <Route index element={<Home />} />
-        <Route path="/venues/supabase" element={<AllVenuesSupabase />} />
+        <Route path="/venues/all" element={<AllVenues />} />
+        <Route path="/venues/:category" element={<VenueByCategory />} />
         <Route path="/search" element={<SearchMap />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/venue/supabase/:id" element={<SpesificVenueSupabase />} />
+        <Route path="/venue/:id" element={<SpesificVenueSupabase />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardIndex />} />

@@ -7,7 +7,29 @@ const supabaseApi = createApi({
   tagTypes: ["Venues", "User", "Bookings"],
   endpoints: (builder) => ({
     getVenues: builder.query({
-      queryFn: async () => {
+      queryFn: async ({ limit, category }) => {
+        console.log(category);
+        if (limit) {
+          const { data, error } = await supabase
+            .from("venues")
+            .select("*")
+            .limit(limit);
+          if (error) {
+            throw { error };
+          }
+
+          return { data };
+        }
+        if (category) {
+          const { data, error } = await supabase
+            .from("venues")
+            .select("*")
+            .eq("type", category);
+          if (error) {
+            throw { error };
+          }
+          return { data };
+        }
         const { data, error } = await supabase.from("venues").select("*");
         if (error) {
           throw { error };

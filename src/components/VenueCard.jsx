@@ -18,7 +18,7 @@ export default function VenueCard({ data }) {
 
         {data.media && data.media.length > 0 && (
           <>
-            <Link to={`/venue/supabase/${data.id}`}>
+            <Link to={`/venue/${data.id}`}>
               <img
                 src={data.media[imgIndex]}
                 className="absolute left-0 top-0 h-full w-full rounded-lg bg-gray-500 object-cover transition-all"
@@ -59,10 +59,7 @@ export default function VenueCard({ data }) {
           </>
         )}
       </div>
-      <Link
-        to={`/venue/supabase/${data.id}`}
-        className="flex flex-col gap-1 py-4"
-      >
+      <Link to={`/venue/${data.id}`} className="flex flex-col gap-1 py-4">
         <div className="flex justify-between">
           <h3 className="font-bold">{data.title}</h3>
           <div>{data.rating}</div>

@@ -14,10 +14,9 @@ export default function Navbar() {
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1024px)" });
 
-  const { isDarkTheme, hasMaxWidthContainer } = useContext(ThemeContext);
+  const { isDarkTheme } = useContext(ThemeContext);
   const navLinkClass = isDarkTheme ? "text-white" : "text-black";
   const hoverNavLinkClass = isDarkTheme ? "after:bg-white" : "after:bg-black";
-  const maxWidthContainerClass = hasMaxWidthContainer ? "max-w-[1500px]" : "";
 
   const auth = useAuth();
 
@@ -33,7 +32,7 @@ export default function Navbar() {
 
   return (
     <div
-      className={`mx-auto ${maxWidthContainerClass} flex h-20 w-full items-center justify-between p-6 font-poppins md:px-10`}
+      className={`mx-auto flex h-20 w-full max-w-[1500px] items-center justify-between p-6 font-poppins md:px-10`}
     >
       <Link to={"/"} className="flex text-xl font-bold text-[#FF004D]">
         Holidaze
@@ -42,7 +41,7 @@ export default function Navbar() {
       {isDesktopOrLaptop && (
         <nav className={`flex gap-4 ${navLinkClass}`}>
           {/* todo: change to reactrouter links later  */}
-          <Link to="/venues/supabase" className={`relative ${hoverLinkClass}`}>
+          <Link to="/venues/all" className={`relative ${hoverLinkClass}`}>
             Venues
           </Link>
           <a className={`relative ${hoverLinkClass}`}>Location</a>
@@ -74,7 +73,9 @@ export default function Navbar() {
           )}
         </nav>
       )}
-      {isTabletOrMobile && <MobileNav></MobileNav>}
+      {isTabletOrMobile && (
+        <MobileNav isLogedIn={isLogedIn} auth={auth}></MobileNav>
+      )}
     </div>
   );
 }

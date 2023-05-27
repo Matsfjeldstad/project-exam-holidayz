@@ -78,9 +78,7 @@ export default function UserVenues() {
                   >
                     <td className="py-4"></td>
                     <td className="py-4">
-                      <Link to={`/venue/supabase/${venue.id}`}>
-                        {venue.title}
-                      </Link>
+                      <Link to={`/venue/${venue.id}`}>{venue.title}</Link>
                     </td>
                     <td className="py-4">{created_at}</td>
                     <td className="py-4">{venue.price_per_night}</td>
