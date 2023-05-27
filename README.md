@@ -46,12 +46,12 @@ To run the app in the development mode, use the following command:
 npm run dev
 ```
 ## Building the App
-To run the app in the development mode, use the following command:
+To build the app, use the following command:
 ```
 npm run build
 ```
-## Running the App
-To run the app in the development mode, use the following command:
+## Preview the App
+To view the build version the app in the development mode, use the following command:
 ```
 npm run preview
 ```
