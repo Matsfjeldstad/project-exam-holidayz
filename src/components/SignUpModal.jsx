@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import * as Yup from "yup";
 import Button from "../components/ui/Button";
 import { useSignUpMutation } from "../store/modules/apiSlice";
+import { Link } from "react-router-dom";
 
 export default function SignupModal() {
   const [signUp, { isLoading, isError, error }] = useSignUpMutation();
@@ -150,9 +151,12 @@ export default function SignupModal() {
           )}
         </Button>
       </form>
-      <div className="mt-6">
-        <span className="text-lg">Already have an account?</span>
-      </div>
+      <span className="text-lg">
+        Already have an account?
+        <Link href="/signup" className="font-bold underline">
+          Register
+        </Link>
+      </span>
       {isError && (
         <motion.div
           initial={{ opacity: 0, y: -50 }}

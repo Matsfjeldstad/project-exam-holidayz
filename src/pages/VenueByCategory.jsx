@@ -47,7 +47,7 @@ export default function VenueByCategory() {
 
   return (
     <div className="mt-32">
-      <section className="mx-auto max-w-[1500px] px-10">
+      <section className="mx-auto max-w-[1500px] px-4 md:px-10">
         <div className="relative mb-10 w-full overflow-scroll">
           <div className="fixed left-8 top-0 h-full w-[100px]"></div>
           <VenueNavigation />
