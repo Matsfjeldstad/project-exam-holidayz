@@ -9,7 +9,11 @@ import { useAuth } from "../../utils/Auth";
 import { Link } from "react-router-dom";
 import { Trash } from "../../assets/icons/Icons";
 import DeleteModal from "../../components/modals/DeleteModal";
-import { AnimatePresence, motion } from "framer-motion";
+let framerMotion;
+import("framer-motion").then((module) => {
+  framerMotion = module;
+  // Now you can use framerMotion.AnimatePresence and framerMotion.motion
+});
 import AvatarImg from "../../components/ui/AvatarImg";
 import PropTypes from "prop-types";
 
@@ -108,7 +112,7 @@ export function BookingsTable({
             </tr>
           </thead>
           <tbody>
-            <AnimatePresence>
+            <framerMotion.AnimatePresence>
               {bookings.map((booking) => {
                 const created_at = format(
                   new Date(booking.created_at),
@@ -124,7 +128,7 @@ export function BookingsTable({
                 );
 
                 return (
-                  <motion.tr
+                  <framerMotion.motion.tr
                     animate={{ opacity: 1, y: 0 }}
                     initial={{ opacity: 0, y: 20 }}
                     exit={{ opacity: 0, y: -20 }}
@@ -143,7 +147,7 @@ export function BookingsTable({
                       <StatusSelectInput booking={booking} />
                     </td>
                     <td className="py-4">
-                      <Link to={`/venue/supabase/${booking.venue_id}`}>
+                      <Link to={`/venue/${booking.venue_id}`}>
                         {booking.venue_title}
                       </Link>
                     </td>
@@ -173,10 +177,10 @@ export function BookingsTable({
                         className="h-8 w-8 cursor-pointer rounded-md fill-red-500 duration-100 hover:bg-red-100"
                       />
                     </td>
-                  </motion.tr>
+                  </framerMotion.motion.tr>
                 );
               })}
-            </AnimatePresence>
+            </framerMotion.AnimatePresence>
           </tbody>
         </table>
       );
@@ -210,7 +214,7 @@ export default function AllbookingsBooking() {
         setmodalObject={setmodalObject}
         bookings={data}
       />
-      <AnimatePresence>
+      <framerMotion.AnimatePresence>
         {deleteModalIsOpen && (
           <DeleteModal
             modalObject={modalObject}
@@ -219,7 +223,7 @@ export default function AllbookingsBooking() {
             type="booking"
           />
         )}
-      </AnimatePresence>
+      </framerMotion.AnimatePresence>
     </div>
   );
 }

@@ -35,4 +35,5 @@ AvatarImg.propTypes = {
   alt: PropTypes.string,
   name: PropTypes.string,
   size: PropTypes.string,
+  id: PropTypes.string,
 };

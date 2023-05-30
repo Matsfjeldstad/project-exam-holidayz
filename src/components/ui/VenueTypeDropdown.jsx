@@ -25,29 +25,23 @@ export default function CheckboxDropdown({ formik, data }) {
     <motion.div
       variants={fadeIn}
       animate="animate"
-      className="flex w-full flex-col rounded-sm bg-slate-100 p-2 shadow-md"
+      className="flex w-full flex-col rounded-sm p-2 shadow-md"
     >
-      {data.map((type) => {
+      {data.map((type, i) => {
         return (
-          <motion.label
-            key={type}
-            variants={type}
-            animate="animate"
-            initial="initial"
-            exit="exit"
-            className="flex w-full items-center justify-start gap-2 border-b p-2 font-medium"
-          >
+          <div key={i} className="flex gap-2">
             <input
-              type="checkbox"
-              name={type}
+              type="radio"
+              name="type"
               onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              checked={formik.values[type]}
-              value={formik.values[type]}
-              className=" h-5 w-5 min-w-[20px] rounded-sm  border font-medium"
+              onChange={() => formik.setFieldValue("type", type)}
+              checked={formik.values.type === type}
+              value={type}
+              className="h-5 w-5 min-w-[20px]  rounded-sm border"
+              placeholder="Type"
             />
-            {type}
-          </motion.label>
+            <div>{type}</div>
+          </div>
         );
       })}
     </motion.div>

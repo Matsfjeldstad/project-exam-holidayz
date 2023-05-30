@@ -52,7 +52,7 @@ export function OwnerVenueBookingsTable({ user_id }) {
                   <AvatarImg size={"small"} name={"hello"} />
                 </td>
                 <td className="py-4">
-                  <Link to={`/venue/supabase/${booking.venue_id}`}>
+                  <Link to={`/venue/${booking.venue_id}`}>
                     {booking.venue_id}
                   </Link>
                 </td>

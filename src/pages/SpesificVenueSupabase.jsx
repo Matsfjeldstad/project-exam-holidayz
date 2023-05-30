@@ -1,15 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
-import Wifi from "../assets/icons/airbnb-icons-amenities/Wifi";
-import Parking from "../assets/icons/airbnb-icons-amenities/Parking";
-import ForkKnife from "../assets/icons/airbnb-icons-amenities/ForkKnife";
-import PawPrint from "../assets/icons/airbnb-icons-amenities/PawPrint";
 import ImageDisplayGrid from "../components/ImageDisplayGrid";
 import ReactMapGLMap from "../components/MapBox/SpesificVenueMap";
 import Calendar from "../components/ui/Calendar";
 import { format } from "date-fns";
 import ThemeContext from "../utils/ThemeContext";
 import { useGetSingleVenueQuery } from "../store/modules/apiSlice";
+import { Wifi, Parking, ForkKnife, PawPrint } from "../assets/icons/Icons";
 
 export default function SpesificVenueSupabase() {
   // const [mapGeoLocationData, setMapGeoLocationData] = useState({
