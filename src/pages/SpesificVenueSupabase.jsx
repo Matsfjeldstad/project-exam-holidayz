@@ -5,34 +5,40 @@ import ReactMapGLMap from "../components/MapBox/SpesificVenueMap";
 import Calendar from "../components/ui/Calendar";
 import { format } from "date-fns";
 import ThemeContext from "../utils/ThemeContext";
-import { useGetSingleVenueQuery } from "../store/modules/apiSlice";
+import {
+  useBookVenueMutation,
+  useGetSingleVenueQuery,
+} from "../store/modules/apiSlice";
 import { Wifi, Parking, ForkKnife, PawPrint } from "../assets/icons/Icons";
+import { useAuth } from "../utils/Auth";
+import AuthModal from "../components/modals/AuthModal";
 
 export default function SpesificVenueSupabase() {
-  // const [mapGeoLocationData, setMapGeoLocationData] = useState({
-  //   latitude: 6.2,
-  //   longitude: 53.6,
-  // });
+  const [bookVenue] = useBookVenueMutation();
   const [dateRange, setDateRange] = useState({
     from: "",
     to: "",
   });
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  const { user } = useAuth();
 
   let { id } = useParams();
 
   const {
     isDarkTheme,
     setIsDarkTheme,
-    hasMaxWidthContainer,
-    setHasMaxWidthContainer,
+
+    hasBgColour,
+    setHasBgColour,
   } = useContext(ThemeContext);
 
   useEffect(() => {
     if (isDarkTheme) {
-      setIsDarkTheme(true);
+      setIsDarkTheme(false);
     }
-    if (!hasMaxWidthContainer) {
-      setHasMaxWidthContainer(true);
+    if (!hasBgColour) {
+      setHasBgColour(true);
     }
     document.title = "Holidaze | Home";
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,25 +63,29 @@ export default function SpesificVenueSupabase() {
         })
       : [];
 
+  const sortedBookings = bookedDates
+    .filter((booking) => booking.from > dateRange?.from)
+    .sort((a, b) => a.from - b.from);
+
+  // find the minimum booking date after the selected 'from' date¨
+  const closestBooking = sortedBookings.length > 0 ? sortedBookings[0] : null;
+
   if (data) {
     return (
-      <div className="mx-auto mt-32 flex max-w-[1500px] flex-col gap-14 px-10">
+      <div className="mx-auto mt-32 flex max-w-[1500px] flex-col gap-14 p-4 md:px-10">
         <div className="">
           <h1 className="mb-2 text-4xl font-medium">{data.title}</h1>
           <div className="flex gap-2">
             <div>4.5</div>
             <div className="font-medium text-gray-700 underline">
               {data.location &&
-                data.location.address.city &&
                 data.location.address.country &&
-                data.location.address.city !== "Unknown" &&
-                data.location.address.country !== "Unknown" &&
                 `${data.location.address.city}, ${data.location.address.country}`}
             </div>
           </div>
         </div>
         {data.media.length > 0 && <ImageDisplayGrid MediaArray={data.media} />}
-        <section className="flex justify-between gap-10">
+        <section className="flex flex-col justify-between gap-10 md:flex-row">
           <div className=" flex w-4/5 max-w-5xl flex-col gap-4">
             <h3 className="text-2xl font-medium">Description</h3>
             <p>{data.description}</p>
@@ -85,25 +95,25 @@ export default function SpesificVenueSupabase() {
             <div className="">
               {data.meta.wifi && (
                 <div className="flex items-center gap-2">
-                  <Wifi />
+                  <Wifi className="min-w-[32px] fill-gray-700" />
                   <div>Wifi</div>
                 </div>
               )}
               {data.meta.parking && (
                 <div className="flex items-center gap-2">
-                  <Parking />
+                  <Parking className="min-w-[32px] fill-gray-700" />
                   <div>Free Parking</div>
                 </div>
               )}
               {data.meta.pets && (
                 <div className="flex items-center gap-2">
-                  <PawPrint />
+                  <PawPrint className="min-w-[32px] fill-gray-700" />
                   <div>Pets Allowed</div>
                 </div>
               )}
               {data.meta.breakfast && (
                 <div className="flex items-center gap-2">
-                  <ForkKnife />
+                  <ForkKnife className="min-w-[32px] fill-gray-700" />
                   <div>Breakfast</div>
                 </div>
               )}
@@ -135,21 +145,29 @@ export default function SpesificVenueSupabase() {
         </section>
         <section className="flex flex-col gap-8">
           <h3 className="text-2xl font-medium">Book Venue</h3>
-          <div className="flex w-full gap-20">
-            <div className="flex flex-col items-end">
+          <div className="flex w-full flex-col gap-20 md:flex-row">
+            <div className="flex w-full flex-col ">
+              <Calendar
+                mode="range"
+                selected={dateRange}
+                onSelect={setDateRange}
+                bookings={bookedDates}
+                numberOfMonths={1}
+                className="block h-full w-fit lg:hidden"
+              />
               <Calendar
                 mode="range"
                 selected={dateRange}
                 onSelect={setDateRange}
                 bookings={bookedDates}
                 numberOfMonths={2}
-                className="h-full w-fit"
+                className="hidden h-full w-fit lg:block"
               />
               <button
                 onClick={() =>
                   setDateRange({
-                    from: "",
-                    to: "",
+                    from: dateRange[0],
+                    to: dateRange[1],
                   })
                 }
                 className="mr-8 mt-3 w-fit underline"
@@ -196,6 +214,10 @@ export default function SpesificVenueSupabase() {
                             : ""
                         }
                         min={format(new Date(), "yyyy-MM-dd")}
+                        max={
+                          closestBooking &&
+                          format(closestBooking.from, "yyyy-MM-dd")
+                        }
                         onChange={(e) => {
                           setDateRange({
                             from: new Date(e.target.value),
@@ -225,6 +247,10 @@ export default function SpesificVenueSupabase() {
                             ? format(dateRange.from, "yyyy-MM-dd")
                             : ""
                         }
+                        max={
+                          closestBooking &&
+                          format(closestBooking.from, "yyyy-MM-dd")
+                        }
                       />
                     </label>
                   </div>
@@ -242,11 +268,14 @@ export default function SpesificVenueSupabase() {
                   type="button"
                   className="w-full rounded-md bg-[#FF004D] p-3 text-white"
                   onClick={() => {
-                    console.log({
-                      venueId: data.id,
-                      from: dateRange.from,
-                      to: dateRange.to,
-                    });
+                    user
+                      ? bookVenue({
+                          id: data.id,
+                          user_id: user.id,
+                          from: new Date(dateRange.from).toISOString(),
+                          to: new Date(dateRange.to).toISOString(),
+                        })
+                      : setAuthModalOpen(true);
                   }}
                 >
                   {" "}
@@ -256,6 +285,7 @@ export default function SpesificVenueSupabase() {
             </div>
           </div>
         </section>
+        {authModalOpen && <AuthModal setIsOpen={setAuthModalOpen} />}
       </div>
     );
   }

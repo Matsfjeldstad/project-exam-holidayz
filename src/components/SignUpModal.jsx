@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import * as Yup from "yup";
 import Button from "../components/ui/Button";
 import { useSignUpMutation } from "../store/modules/apiSlice";
+import { Link } from "react-router-dom";
 
 export default function SignupModal() {
   const [signUp, { isLoading, isError, error }] = useSignUpMutation();
@@ -34,7 +35,7 @@ export default function SignupModal() {
   isError && console.log(error);
   return (
     <div className="mx-auto max-w-xl p-6">
-      <h4 className="">Login</h4>
+      <h4 className="">Sign up</h4>
       <h1 className="mt-4 text-2xl font-bold">Welcome to Holidaze</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6 flex flex-col gap-4">
         <label className="flex flex-col gap-1">
@@ -150,9 +151,12 @@ export default function SignupModal() {
           )}
         </Button>
       </form>
-      <div className="mt-6">
-        <span className="text-lg">Already have an account?</span>
-      </div>
+      <span className="text-lg">
+        Already have an account?
+        <Link href="/signup" className="font-bold underline">
+          Login
+        </Link>
+      </span>
       {isError && (
         <motion.div
           initial={{ opacity: 0, y: -50 }}

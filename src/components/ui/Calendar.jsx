@@ -1,12 +1,15 @@
 import { DayPicker } from "react-day-picker";
 import PropTypes from "prop-types";
 
-// Function that finds the closest booking date after the selected date
-
-// function that disables days if range is overlapping days. like airbnbs calendar
-
 export default function Calendar(props) {
-  const { bookings } = props;
+  const { bookings, selected } = props;
+
+  const sortedBookings = bookings
+    .filter((booking) => booking.from > selected?.from)
+    .sort((a, b) => a.from - b.from);
+
+  // find the minimum booking date after the selected 'from' date¨
+  const closestBooking = sortedBookings.length > 0 ? sortedBookings[0] : null;
 
   return (
     <DayPicker
@@ -19,12 +22,15 @@ export default function Calendar(props) {
         ...bookings,
         {
           before: new Date(),
+          after: closestBooking?.from,
         },
       ]}
       {...props}
     />
   );
 }
+
+// ...
 
 const classNames = {
   vhidden: "sr-only",

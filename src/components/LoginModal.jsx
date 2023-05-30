@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import * as Yup from "yup";
 import Button from "../components/ui/Button";
 import { useLogInMutation } from "../store/modules/apiSlice";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export default function LoginModal() {
   const [logIn, { data, isLoading, isError, error }] = useLogInMutation();
@@ -113,7 +113,13 @@ export default function LoginModal() {
         </Button>
       </form>
       <div className="mt-6">
-        <span className="text-lg">Dont have an account?</span>
+        <span className="text-lg">
+          Dont have an account?
+          <Link href="/signup" className="font-bold underline">
+            {" "}
+            Register
+          </Link>
+        </span>
       </div>
       {isError && (
         <motion.div

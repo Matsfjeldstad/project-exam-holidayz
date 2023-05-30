@@ -210,6 +210,26 @@ const supabaseApi = createApi({
       },
       invalidatesTags: ["Venues", "Bookings", "User"],
     }),
+    bookVenue: builder.mutation({
+      queryFn: async ({ from, to, user_id, id }) => {
+        const { data, error } = await supabase
+          .from("bookings")
+          .insert({
+            booking_start_date: from.toString(),
+            booking_end_date: to.toString(),
+            booked_by: user_id,
+            venue_id: id,
+          })
+          .select()
+          .single();
+        if (error) {
+          throw { error };
+        }
+        console.log(data);
+        return { data };
+      },
+      invalidatesTags: ["Venues", "Bookings", "User"],
+    }),
     deleteBooking: builder.mutation({
       queryFn: async (id) => {
         const { data, error } = await supabase
@@ -343,6 +363,7 @@ export const {
   useLogInMutation,
   useSignUpMutation,
   useDeleteVenueMutation,
+  useBookVenueMutation,
   useDeleteBookingMutation,
   useUpdateBookingStatusMutation,
   usePublishVenueMutation,
