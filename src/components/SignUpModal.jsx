@@ -35,7 +35,7 @@ export default function SignupModal() {
   isError && console.log(error);
   return (
     <div className="mx-auto max-w-xl p-6">
-      <h4 className="">Login</h4>
+      <h4 className="">Sign up</h4>
       <h1 className="mt-4 text-2xl font-bold">Welcome to Holidaze</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6 flex flex-col gap-4">
         <label className="flex flex-col gap-1">
@@ -154,7 +154,7 @@ export default function SignupModal() {
       <span className="text-lg">
         Already have an account?
         <Link href="/signup" className="font-bold underline">
-          Register
+          Login
         </Link>
       </span>
       {isError && (

@@ -28,16 +28,17 @@ export default function SpesificVenueSupabase() {
   const {
     isDarkTheme,
     setIsDarkTheme,
-    hasMaxWidthContainer,
-    setHasMaxWidthContainer,
+
+    hasBgColour,
+    setHasBgColour,
   } = useContext(ThemeContext);
 
   useEffect(() => {
     if (isDarkTheme) {
-      setIsDarkTheme(true);
+      setIsDarkTheme(false);
     }
-    if (!hasMaxWidthContainer) {
-      setHasMaxWidthContainer(true);
+    if (!hasBgColour) {
+      setHasBgColour(true);
     }
     document.title = "Holidaze | Home";
     // eslint-disable-next-line react-hooks/exhaustive-deps
