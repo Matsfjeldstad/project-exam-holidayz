@@ -9,7 +9,6 @@ import { useAuth } from "../../utils/Auth";
 import { Link } from "react-router-dom";
 import { Trash } from "../../assets/icons/Icons";
 import DeleteModal from "../../components/modals/DeleteModal";
-// import { AnimatePresence, motion } from "framer-motion";
 let framerMotion;
 import("framer-motion").then((module) => {
   framerMotion = module;

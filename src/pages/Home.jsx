@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "../utils/Auth";
 import { useGetVenuesQuery } from "../store/modules/apiSlice";
 import VenueCard from "../components/VenueCard";
+import { Link } from "react-router-dom";
 
 const boxVariant = {
   hidden: {
@@ -104,17 +105,26 @@ export default function Home() {
               onSubmit={handleForm}
               className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
             >
-              <button className="w-full rounded-full bg-[#FF004D] px-10 py-4 font-medium text-white duration-150 hover:scale-105 hover:bg-[#ff004ccc] sm:w-fit ">
+              <Link
+                to="/search"
+                className="w-full rounded-full bg-[#FF004D] px-10 py-4 font-medium text-white duration-150 hover:scale-105 hover:bg-[#ff004ccc] sm:w-fit "
+              >
                 Search Locations
-              </button>
+              </Link>
               {auth.user ? (
-                <button className="w-full rounded-full bg-gray-100 px-10 py-4 font-medium text-gray-950 duration-150 hover:scale-105 hover:bg-gray-200 sm:w-fit ">
+                <Link
+                  to="/dashboard"
+                  className="w-full rounded-full bg-gray-100 px-10 py-4 font-medium text-gray-950 duration-150 hover:scale-105 hover:bg-gray-200 sm:w-fit "
+                >
                   Go to dashboard
-                </button>
+                </Link>
               ) : (
-                <button className="w-full rounded-full bg-gray-100 px-10 py-4 font-medium text-gray-950 duration-150 hover:scale-105 hover:bg-gray-200 sm:w-fit ">
+                <Link
+                  to="/login"
+                  className="w-full rounded-full bg-gray-100 px-10 py-4 font-medium text-gray-950 duration-150 hover:scale-105 hover:bg-gray-200 sm:w-fit "
+                >
                   Login
-                </button>
+                </Link>
               )}
             </motion.div>
           </motion.div>

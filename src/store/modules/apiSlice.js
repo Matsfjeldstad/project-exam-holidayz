@@ -241,6 +241,91 @@ const supabaseApi = createApi({
       },
       invalidatesTags: ["Bookings"],
     }),
+    getAvatarImage: builder.query({
+      queryFn: async (userId) => {
+        const { data, error } = await supabase.storage
+          .from("avatar")
+          .getPublicUrl(`${userId}/profile.png`);
+        if (error) {
+          console.log(error);
+          throw { error };
+        }
+        console.log(data);
+        return { data };
+      },
+    }),
+    getApiLocation: builder.query({
+      queryFn: async () => {
+        try {
+          const response = await fetch("https://ipapi.co/json");
+          const data = await response.json();
+          return { data };
+        } catch (error) {
+          console.log(error);
+          throw { error };
+        }
+      },
+    }),
+    publishVenue: builder.mutation({
+      queryFn: async ({
+        user_id,
+        location,
+        meta,
+        title,
+        description,
+        price_per_night,
+        max_guests,
+        type,
+      }) => {
+        const { data, error } = await supabase
+          .from("venues")
+          .insert({
+            owner_id: user_id,
+            location: location,
+            title: title,
+            description: description,
+            price_per_night: price_per_night,
+            max_guest: max_guests,
+            type: type,
+            meta: meta,
+          })
+          .select()
+          .single();
+        if (error) {
+          throw { error };
+        }
+        console.log(data);
+        return { data };
+      },
+      invalidatesTags: ["Venues"],
+    }),
+    uploadFiles: builder.mutation({
+      queryFn: async ({ file, venue_id, user_id }) => {
+        const { data, error } = await supabase.storage
+          .from("venue_media")
+          .upload(`${user_id}/${venue_id}/${file.name}${Date.now()}`, file);
+        if (error) {
+          throw { error };
+        }
+        return { data };
+      },
+    }),
+    updateVenue: builder.mutation({
+      queryFn: async ({ type, media, venue_id }) => {
+        if (type === "addMedia") {
+          const { data, error } = await supabase
+            .from("venues")
+            .update({ media: media })
+            .eq("id", venue_id)
+            .select();
+          if (error) {
+            throw { error };
+          }
+          return { data };
+        }
+      },
+      invalidatesTags: ["Venues"],
+    }),
   }),
 });
 
@@ -260,5 +345,10 @@ export const {
   useDeleteVenueMutation,
   useDeleteBookingMutation,
   useUpdateBookingStatusMutation,
+  usePublishVenueMutation,
+  useUploadFilesMutation,
+  useGetAvatarImageQuery,
+  useGetApiLocationQuery,
+  useUpdateVenueMutation,
 } = supabaseApi;
 export { supabaseApi };

@@ -86,7 +86,11 @@ export default function DashboardIndex() {
         <>
           <div className="flex flex-col gap-3">
             <div className="mb-10">
-              <AvatarImg src={userData.profile_img} name={userData.name} />
+              <AvatarImg
+                src={userData.profile_img}
+                name={userData.name}
+                id={userData.id}
+              />
               <h1 className="text-2xl font-semibold">
                 Good Day, {userData.name}{" "}
               </h1>

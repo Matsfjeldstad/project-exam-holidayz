@@ -86,7 +86,7 @@ export default function UserVenues() {
                     </td>
                     <td className="py-4">{created_at}</td>
                     <td className="py-4">{venue.price_per_night}</td>
-                    <td className="py-4">{venue.type.caravan}</td>
+                    <td className="py-4 capitalize">{venue.type}</td>
                     <td className="py-4 ">{venue.bookings.length}</td>
                     <td className="py-4">
                       <Link to={`/dashboard/edit-venue/${venue.id}`}>
