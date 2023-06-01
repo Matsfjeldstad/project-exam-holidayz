@@ -3,10 +3,10 @@ import Router from "./routes/Router";
 import Navbar from "./components/shared/Navbar";
 import ThemeContext from "./utils/ThemeContext";
 import { useLocation } from "react-router-dom";
+import Footer from "./components/shared/Footer";
 
 export default function Layout() {
   const { pathname } = useLocation();
-  console.log("test", pathname.includes("/dashboard"));
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [hasMaxWidthContainer, setHasMaxWidthContainer] = useState(false);
   const [hasBgColour, setHasBgColour] = useState(false);
@@ -40,7 +40,7 @@ export default function Layout() {
         <main className=" min-h-screen font-poppins">
           <Router />
         </main>
-        <footer>hello</footer>
+        <Footer />
       </ThemeContext.Provider>
     </>
   );
