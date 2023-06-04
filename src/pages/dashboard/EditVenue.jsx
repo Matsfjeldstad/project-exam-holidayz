@@ -1,32 +1,59 @@
-import { useParams } from "react-router-dom";
-import { useGetSingleVenueQuery } from "../../store/modules/apiSlice";
+import { Navigate, useParams } from "react-router-dom";
+import {
+  useGetSingleVenueQuery,
+  useUpdateVenueMutation,
+  useUploadFilesMutation,
+} from "../../store/modules/apiSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
 import CheckboxDropdown from "../../components/ui/CheckboxDropdown";
 import { useState } from "react";
-import { Chevorn, MapPin, Pencil } from "../../assets/icons/Icons";
+import { Chevorn, Cross, MapPin, Pencil, Plus } from "../../assets/icons/Icons";
 import { AnimatePresence, motion } from "framer-motion";
 import VenueTypeDropdown from "../../components/ui/VenueTypeDropdown";
-import { AddressAutofill } from "@mapbox/search-js-react";
+import { EditMap } from "../../components/MapBox/SearchAllVenuesMap";
 
 export function EditVenueForm({ data }) {
-  console.log();
+  const [uploadFiles] = useUploadFilesMutation();
+  const [updateVenue] = useUpdateVenueMutation();
   const [facilitiesDropdownOpen, setFacilitiesDropdownOpen] = useState(false);
   const [venueTypeDropdownOpen, setVenueTypeDropdownOpen] = useState(false);
-  const [countryValue, setCountryValue] = useState(
-    data.location.address.country
-  );
+  const [lat, setLat] = useState(data.location.coordinates.lat);
+  const [lon, setLon] = useState(data.location.coordinates.lon);
+  const [files, setFiles] = useState(data.media);
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const newFiles = Array.from(event.dataTransfer.files);
+    const validFiles = newFiles.filter(
+      (file) =>
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/webp"
+    );
+    setFiles([...files, ...validFiles]);
+    formik.setFieldValue("images", [...files]);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  console.log(data.id);
 
   const formik = useFormik({
     initialValues: {
-      title: data && data.title,
+      id: data.id,
+      title: data.title,
       description: data.description,
       price_per_night: data.price_per_night,
-      country: countryValue,
+      country: data.location.address.country,
       city: data.location.address.city,
       street: data.location.address.street,
       zip: data.location.address.zip,
+      lon: lon,
+      lat: lat,
       max_guest: data.max_guest,
       wifi: data.meta.wifi,
       pool: data.meta.pool,
@@ -38,56 +65,89 @@ export function EditVenueForm({ data }) {
       tv: data.meta.tv,
       washing_machine: data.meta.washing_machine,
       gym: data.meta.gym,
-      // boat: data.type.boat,
-      // house: data.type.house,
-      // hotel: data.type.hotel,
-      // apartment: data.type.apartment,
-      // cabin: data.type.cabin,
-      // caravan: data.type.caravan,
-      boat: data.type.boat,
-      house: data.type.house,
-      hotel: data.type.hotel,
-      apartment: data.type.apartment,
-      cabin: data.type.cabin,
-      caravan: data.type.caravan,
+      type: data.type,
+      images: data.media,
     },
     validationSchema: Yup.object({
-      title: Yup.string().required("Email is required"),
+      title: Yup.string().required("Title is required"),
+      images: Yup.array().required("Images are required").min(1),
+      description: Yup.string().required("Description is required"),
+      price_per_night: Yup.number()
+        .required("Price is required")
+        .min(1, "Price must be greater than 0"),
+      max_guest: Yup.number()
+        .required("Max guests is required")
+        .min(1, "Max guests must be greater than 0"),
+      type: Yup.string().required("Type is required"),
     }),
     onSubmit: (values) => {
-      console.log({
-        title: values.title,
-        description: values.description,
-        price_per_night: values.price_per_night,
-        location: {
-          address: {
-            country: values.country,
-            city: values.city,
-            street: values.street,
-            zip: values.zip,
-          },
-        },
-        max_guest: values.max_guest,
-        meta: {
-          wifi: values.wifi,
-          pool: values.pool,
-          kitchen: values.kitchen,
-          heating: values.heating,
-          parking: values.parking,
-          air_conditioning: values.air_conditioning,
-          pets: values.pets,
-          tv: values.tv,
-          washing_machine: values.washing_machine,
-          gym: values.gym,
-        },
-        type: {
-          boat: values.boat,
-          house: values.house,
-          hotel: values.hotel,
-          apartment: values.apartment,
-          cabin: values.cabin,
-          caravan: values.caravan,
-        },
+      console.log(values);
+      const imageUrls = [...data.media];
+      const imageDiff = files.filter((image) => !data.media.includes(image));
+      imageDiff.forEach((file) => {
+        const uploadFunction = uploadFiles({
+          venue_id: data.id,
+          file,
+          user_id: data.owner_id,
+        })
+          .then((res) => {
+            const ImagePath = res.data.path;
+            const fileUrl = `${
+              import.meta.env.VITE_REACT_SUPABASE_URL
+            }/storage/v1/object/public/venue_media/${ImagePath}`;
+            return fileUrl;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        imageUrls.push(uploadFunction);
+
+        Promise.all(imageUrls)
+          .then((res) => {
+            console.log(res);
+            updateVenue({
+              values: {
+                title: values.title,
+                description: values.description,
+                price_per_night: values.price_per_night,
+                max_guest: values.max_guest,
+                type: values.type,
+                media: res,
+                meta: {
+                  wifi: values.wifi,
+                  pool: values.pool,
+                  kitchen: values.kitchen,
+                  heating: values.heating,
+                  parking: values.parking,
+                  air_conditioning: values.air_conditioning,
+                  pets: values.pets,
+                  tv: values.tv,
+                  washing_machine: values.washing_machine,
+                  gym: values.gym,
+                },
+                location: {
+                  address: {
+                    country: values.country,
+                    city: values.city,
+                    street: values.street,
+                    zip: values.zip,
+                  },
+                  coordinates: {
+                    lat: values.lat,
+                    lon: values.lon,
+                  },
+                },
+              },
+              venue_id: data.id,
+              file,
+            }).then((res) => {
+              console.log("hello", res);
+              return <Navigate to={"/venue/" + data.id} />;
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
     },
   });
@@ -95,9 +155,12 @@ export function EditVenueForm({ data }) {
   return (
     <form
       onSubmit={formik.handleSubmit}
-      className="bg-gray-150 mt-6 flex w-full flex-col gap-4 rounded-lg border-2 border-gray-300 p-10"
+      className="bg-gray-150 mt-6 flex w-full flex-col gap-4 rounded-lg border-2 border-gray-300 p-4 md:p-10"
     >
       <label className="flex w-full flex-col gap-1 text-xl font-medium">
+        {formik.errors.title && formik.touched.title && (
+          <div className=" text-red-500">{formik.errors.title}</div>
+        )}
         Title:
         <input
           type="text"
@@ -105,94 +168,47 @@ export function EditVenueForm({ data }) {
           value={formik.values.title}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          className="w-full border-b-2 border-gray-300 py-2 text-3xl font-medium  focus-visible:outline-transparent "
+          placeholder="Title"
+          className="w-full border-b-2 border-gray-300 py-2 text-3xl font-medium focus-visible:outline-transparent "
         />
       </label>
-      <label className="mt-10 flex w-full flex-col gap-1 rounded-lg border bg-gray-50 px-2 py-2 text-xs font-medium text-gray-500">
+      {formik.errors.description && formik.touched.description && (
+        <div className="text-red-500">{formik.errors.description}</div>
+      )}
+      <label className="mt-2 flex w-full flex-col gap-1 rounded-lg border bg-gray-50 px-2 py-2 text-xs font-medium text-gray-500">
         Venue description*
         <textarea
           type="text"
           name="description"
           value={formik.values.description}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="Description"
           className=" h-40 w-full bg-transparent text-base font-medium text-gray-900"
         />
       </label>
       <div className="mt-10 flex w-full flex-col gap-4 font-medium">
         <div className="flex items-center">
-          <MapPin className="h-10 w-10 fill-gray-700" /> Location
+          <MapPin className="h-10 w-10 fill-gray-700" />
+          Location
         </div>
-        <div className="flex w-full gap-4">
-          <label className="flex h-fit w-full flex-col gap-1 rounded-lg border bg-gray-50 p-1 px-2 text-xs font-medium text-gray-500">
-            Country
-            <AddressAutofill
-              accessToken={import.meta.env.VITE_REACT_MAPBOX_API_KEY}
-              onChange={(city) => {
-                formik.setFieldValue("country", city);
-              }}
-              onRetrieve={(city) => {
-                console.log(city);
-              }}
-            >
-              <input
-                type="text"
-                name="country"
-                onBlur={formik.handleBlur}
-                value={formik.values.country}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  setCountryValue(e.target.value);
-                }}
-                autoComplete="country-name"
-                placeholder="Country"
-                className="w-full bg-transparent text-lg font-medium text-gray-900"
-              />
-            </AddressAutofill>
-          </label>
-          <label className="flex h-fit w-full flex-col gap-1 rounded-lg border bg-gray-50 p-1 px-2 text-xs font-medium text-gray-500">
-            city
-            <input
-              type="text"
-              name="city"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.city}
-              autoComplete="address-level2"
-              placeholder="city"
-              className="w-full bg-transparent text-lg font-medium text-gray-900"
-            />
-          </label>
-        </div>
-        <div className="flex w-full gap-4">
-          <label className="flex h-fit w-full flex-col gap-1 rounded-lg border bg-gray-50 p-1 px-2 text-xs font-medium text-gray-500">
-            Street name
-            <input
-              type="text"
-              name="street"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.street}
-              autoComplete="address-line1"
-              placeholder="street name"
-              className="w-full bg-transparent text-lg font-medium text-gray-900"
-            />
-          </label>
-          <label className="flex h-fit w-full flex-col gap-1 rounded-lg border bg-gray-50 p-1 px-2 text-xs font-medium text-gray-500">
-            zip code
-            <input
-              type="zip"
-              name="zip"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.zip}
-              placeholder="zip code"
-              autoComplete="shipping postcode"
-              className="w-full bg-transparent text-lg font-medium text-gray-900"
-            />
-          </label>
+        <div className=" h-[500px]">
+          <EditMap
+            formik={formik}
+            setLat={setLat}
+            setLon={setLon}
+            lon={lon}
+            lat={lat}
+          ></EditMap>
         </div>
       </div>
       <div className="mt-10 flex w-full gap-4">
+        {(formik.errors.max_guest && formik.touched.max_guest) ||
+          (formik.errors.price_per_night && formik.touched.price_per_night && (
+            <div className="text-red-500">
+              {formik.errors.price_per_night || formik.errors.max_guest}
+            </div>
+          ))}
         <label className="flex h-fit w-full flex-col gap-1 rounded-lg border bg-gray-50 p-1 px-2 text-xs font-medium text-gray-500">
           Max number of guest
           <input
@@ -304,11 +320,104 @@ export function EditVenueForm({ data }) {
           </div>
         </div>
       </div>
+      <div className="mt-10 flex flex-col gap-4 md:flex-row">
+        <div className="h-[500px] w-full border-2 border-dashed md:w-1/2 ">
+          <label
+            htmlFor="images"
+            className="flex h-full cursor-pointer items-center justify-center"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
+            <div className="flex flex-col items-center gap-2">
+              {!files.length ? (
+                <>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-950 p-0.5">
+                    <Plus className="fill-gray-100" />
+                  </div>
+                  <div className="text-center">
+                    {" "}
+                    Click Here to add Image Or Drag and Drop file
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-950 p-0.5">
+                    <Plus className="fill-gray-100" />
+                  </div>
+                  <div>{files.length} files</div>
+                  <div className="text-center">
+                    {" "}
+                    Click Here to add Image Or Drag and Drop file
+                  </div>
+                </>
+              )}
+            </div>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              onBlur={formik.handleBlur}
+              onChange={(event) => {
+                setFiles((prev) => [...prev, ...event.target.files]);
+                formik.setFieldValue("images", [
+                  ...files,
+                  ...event.target.files,
+                ]);
+              }}
+              multiple
+              hidden
+            />
+          </label>
+        </div>
+        <div className="w-full md:w-1/2">
+          <AnimatePresence className="md:grid-cols- grid grid-cols-2 gap-4 sm:grid-cols-2">
+            {files.length ? (
+              files.map((file, index) => (
+                <motion.div
+                  animate={{ scale: 1, opacity: 1 }}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  key={index}
+                  className="relative"
+                >
+                  {typeof file === "string" ? (
+                    <img
+                      src={file}
+                      alt="venue"
+                      className="h-40 w-40 rounded-md object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={file ? URL.createObjectURL(file) : ""}
+                      alt="venue"
+                      className="h-40 w-40 rounded-md object-cover"
+                    />
+                  )}
+                  <button
+                    type="button"
+                    className="absolute right-0 top-0 flex h-8 w-8 items-center justify-center rounded-full bg-gray-900"
+                    onClick={() => {
+                      setFiles((prev) => prev.filter((_, i) => i !== index));
+                    }}
+                  >
+                    <Cross className="fill-gray-100" />
+                  </button>
+                </motion.div>
+              ))
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                No Images Added
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
       <button
         type="submit"
-        className="mt-10 w-full rounded-lg bg-gray-900 py-2 font-medium text-white"
+        className="mt-10 w-fit min-w-[300px] rounded-lg bg-gray-900 p-4 py-2 font-medium text-white"
       >
-        Edit venue
+        updateVenue
       </button>
     </form>
   );
