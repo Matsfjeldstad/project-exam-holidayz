@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import PropTypes from "prop-types";
 import CheckboxDropdown from "../../components/ui/CheckboxDropdown";
 import { useEffect, useState } from "react";
-import { Chevorn, MapPin, Pencil, Plus, X } from "../../assets/icons/Icons";
+import { Chevorn, MapPin, Pencil, Plus, Cross } from "../../assets/icons/Icons";
 import { AnimatePresence, motion } from "framer-motion";
 import VenueTypeDropdown from "../../components/ui/VenueTypeDropdown";
 import GeneralMap from "../../components/MapBox/SearchAllVenuesMap";
@@ -17,17 +17,10 @@ import {
 import { Navigate } from "react-router-dom";
 
 export function PublishVenueForm() {
-  const [
-    publishVenue,
-  ] = usePublishVenueMutation();
-  const [
-    uploadFiles,
-  ] = useUploadFilesMutation();
+  const [publishVenue] = usePublishVenueMutation();
+  const [uploadFiles] = useUploadFilesMutation();
   const [deleteVenue] = useDeleteVenueMutation();
-  const [
-    updateVeneue,
-    
-  ] = useUpdateVenueMutation();
+  const [updateVeneue] = useUpdateVenueMutation();
 
   const [facilitiesDropdownOpen, setFacilitiesDropdownOpen] = useState(false);
   const [venueTypeDropdownOpen, setVenueTypeDropdownOpen] = useState(false);
@@ -417,7 +410,7 @@ export function PublishVenueForm() {
                       setFiles((prev) => prev.filter((_, i) => i !== index));
                     }}
                   >
-                    <X className="fill-gray-100" />
+                    <Cross className="fill-gray-100" />
                   </button>
                 </motion.div>
               ))
