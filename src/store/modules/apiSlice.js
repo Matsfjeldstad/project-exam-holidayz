@@ -528,7 +528,7 @@ const supabaseApi = createApi({
      * @returns {Promise} Promise object that resolves when the venue has been updated.
      */
     updateVenue: builder.mutation({
-      queryFn: async ({ type, media, venue_id }) => {
+      queryFn: async ({ type, media, venue_id, values }) => {
         if (type === "addMedia") {
           const { data, error } = await supabase
             .from("venues")
@@ -540,6 +540,17 @@ const supabaseApi = createApi({
           }
           return { data };
         }
+
+        console.log(venue_id, "test");
+        const { data, error } = await supabase
+          .from("venues")
+          .update(values)
+          .eq("id", venue_id)
+          .select();
+        if (error) {
+          throw { error };
+        }
+        return { data };
       },
       invalidatesTags: ["Venues"],
     }),
