@@ -552,41 +552,27 @@ const supabaseApi = createApi({
      * @param {Object} likeDetails Details for liking a venue, including type, venue_id, and user_id.
      * @returns {Promise} Promise object that resolves when the venue has been liked.
      */
+
     like: builder.mutation({
-      queryFn: async ({ venue_id, user_id }) => {
-        const { data: userData, error } = await supabase
-          .from("profiles")
-          .select("liked_venues")
-          .eq("id", user_id);
+      queryFn: async ({ venue_id, user_id, usersLikedVenues }) => {
+        let likedVenues = [...usersLikedVenues];
 
-        console.log(userData);
-
-        if (error) {
-          console.log("Error getting user data:", error);
-          return null;
-        }
-
-        const likedVenues = userData[0].liked_venues;
-        if (!likedVenues.includes(venue_id)) {
+        if (likedVenues.includes(venue_id)) {
+          likedVenues = likedVenues.filter((id) => id !== venue_id);
+        } else {
           likedVenues.push(venue_id);
         }
-        if (likedVenues.includes(venue_id)) {
-          const index = likedVenues.indexOf(venue_id);
-          if (index > -1) {
-            likedVenues.splice(index, 1);
-          }
-        }
+
         const { data: updatedData, error: updateError } = await supabase
           .from("profiles")
           .update({ liked_venues: likedVenues })
           .eq("id", user_id);
 
         if (updateError) {
-          console.log("Error updating liked venues:", updateError);
-          return null;
+          throw { updateError };
         }
 
-        return updatedData;
+        return { updatedData };
       },
       invalidatesTags: ["User"],
     }),

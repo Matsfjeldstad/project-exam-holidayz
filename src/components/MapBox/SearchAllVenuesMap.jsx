@@ -65,7 +65,6 @@ export default function GeneralMap({ formik, setLat, setLon }) {
           <SearchBox
             accessToken={import.meta.env.VITE_REACT_MAPBOX_API_KEY}
             onRetrieve={(result) => {
-              console.log("mapbox", result);
               setViewport({
                 ...viewport,
                 longitude: result.features[0].properties.coordinates.longitude,
